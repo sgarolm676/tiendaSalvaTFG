@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+	<div class="card text-black mx-auto mt-5" style="width: 600px;">
+        <div class="card-body text-center">
+            <h2 class="h1 card-title">{% translate "Registrando" %}</h2>
+            <div class="card-body">
+                <form class="form form-login h-75" method="post" action="">
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
+                    {% for f in form %}
+                        <div class="mb-3"><label>{{ f.label }}</label>{{ f }}</div>
+                        {{ f.errors }}
+                    {% endfor %}
+                    <button type="submit" class="btn btn-lg btn-dark">{% translate "Aceptar" %}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

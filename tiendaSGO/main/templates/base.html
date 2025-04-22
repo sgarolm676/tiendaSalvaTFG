@@ -1,0 +1,51 @@
+{% load static %}
+{% load i18n %}
+
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% translate "Tienda Virtual" %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="{% static 'css/tienda.css' %}">
+</head>
+<body class="bg-dark">
+        <div class="page-header bg-white w-100 p-4 d-flex align-items-center">
+		    <h1><a href="/" class="text-decoration-none text-black font-weight-bold">{% translate "Tienda Virtual" %}</a></h1>
+            {% if not user.is_authenticated and "/login" not in request.path %}
+                <a href="{% url "login" %}" class="btn btn-lg btn-dark ms-auto">{% translate "Iniciar sesión" %}</a>
+                <a href="{% url "signup" %}" class="btn btn-lg btn-dark ms-2">{% translate "Registrarse" %}</a>
+            {% elif user.is_authenticated %}
+                <p class="my-auto ms-auto">
+                    {% if request.saldo is not None  %}
+                        <span class="me-4 h4">{{ request.saldo }}€</span>
+                    {% endif %}
+                    {% translate "Hola" %} {{ user.username }}<a href="{% url "user_configuration" %}" class="ms-2"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" class="bi bi-gear-fill" viewBox="0 0 16 16">
+                        <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
+                      </svg></a> <a href="{% url "logout" %}" class="btn btn-sm btn-dark ms-3">{% translate "Cerrar sesión" %}</a>
+                    <a href="{% url "carrito" %}" class="btn btn-sm btn-dark ms-3">{% translate "Mi carrito" %} {% if request.carrito|length %}({{ request.carrito|length }}){% endif %}</a></p>
+            {% endif %}
+        </div>
+        <div class="row">
+            <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+                <input name="next" type="hidden" value="{{ redirect_to }}">
+                <select name="language">
+                    {% get_current_language as LANGUAGE_CODE %}
+                    {% get_available_languages as LANGUAGES %}
+                    {% get_language_info_list for LANGUAGES as languages %}
+                    {% for language in languages %}
+                        <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+                            {{ language.name_local }} ({{ language.code }})
+                        </option>
+                    {% endfor %}
+                </select>
+                <input type="submit" value="Go">
+            </form>
+        </div>
+    	<div class="container-fluid text-white p-4" >
+                {% block content %}
+                {% endblock %}
+    	</div>
+</body>
+</html>

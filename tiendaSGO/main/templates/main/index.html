@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load i18n %}
+
+{% block content %}
+	<h2 class="text-center h1 mt-5">{% translate "Bienvenido a la tienda virtual" %}</h2>
+    <div class="d-flex justify-content-around  col-12 col-lg-6 m-auto mt-5 gap-2">
+        {% if user.is_superuser %}
+        	<a href="{% url "listado" %}" class="card text-black card-index text-decoration-none" style="width: 300px; height: 300px">
+                <div class="card-body text-center">
+                        <h2 class="card-title">{% translate "Listado" %}</h2>
+                        <p class="card-text">{% translate "Solo para administradores. Edita, crea y elimina productos de manera rápida" %}.</p>
+                </div>
+            </a>
+        {% endif %}
+        <a href="{% url "compra" %}" class="card text-black card-index text-decoration-none" style="width: 300px; height: 300px">
+            <div class="card-body text-center">
+                    <h2 class="card-title">{% translate "Compra" %}</h2>
+                    <p class="card-text">{% translate "Compra los mejores productos tecnológicos del mercado al mejor precio con el css más cutre de toda España" %}.</p>
+            </div>
+        </a>
+        {% if user.is_superuser %}
+            <a href="{% url 'informe_index' %}" class="card text-black card-index text-decoration-none" style="width: 300px; height: 300px">
+                    <div class="card-body text-center">
+                            <h2 class="card-title">{% translate "Informe" %}</h2>
+                            <p class="card-text">{% translate "Informes de la tienda, un poco de todo" %}.</p>
+                    </div>
+            </a>
+        {% endif %}
+        </div>
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+	<h2 class="text-center h1 mt-5">{% translate "Informes" %}</h2>
+    <div class="d-flex justify-content-around  col-12 col-lg-6 m-auto mt-5 gap-2">
+        <a href="{% url "filtrar_marcas" %}" class="card text-black card-index text-decoration-none" style="width: 300px; height: 300px">
+            <div class="card-body text-center">
+                <h2 class="card-title">{% translate "Productos por marcas" %}</h2>
+                <p class="card-text">{% translate "Reutilicemos el filtro de productos por marca una vez más, es gratis!!" %}.</p>
+            </div>
+        </a>
+        <a href="{% url "top_diez_productos" %}" class="card text-black card-index text-decoration-none" style="width: 300px; height: 325px">
+            <div class="card-body text-center">
+                    <h2 class="card-title">{% translate "Top diez productos más vendidos" %}</h2>
+                    <p class="card-text">{% translate "Devuelve una lista con los diez productos más vendidos a través del numero de unidades vendidas" %}.</p>
+            </div>
+        </a>
+        <a href="{% url "top_diez_clientes" %}" class="card text-black card-index text-decoration-none" style="width: 300px; height: 300px">
+            <div class="card-body text-center">
+                <h2 class="card-title">{% translate "Top diez mejores clientes" %}</h2>
+                <p class="card-text">{% translate "Quién se ha gastado más dinero por aqui???" %}".</p>
+            </div>
+        </a>
+        <a href="{% url "compras_cliente" %}" class="card text-black card-index text-decoration-none" style="width: 300px; height: 300px">
+            <div class="card-body text-center">
+                <h2 class="card-title">{% translate "Ver compras de cada cliente" %}</h2>
+                <p class="card-text">{% translate "Todas las compras de todos los clientes, perfecto para depurar o ser un cotilla" %}.</p>
+            </div>
+        </a>
+    </div>
+
+{% endblock %}

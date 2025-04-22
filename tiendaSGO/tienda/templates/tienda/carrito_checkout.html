@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+	<div class="card text-black mx-auto mt-5" style="width: 500px;">
+        <div class="card-body text-center">
+            <h2 class="h1 card-title">{% translate "¿Deseas realizar la compra?" %}</h2>
+            <div class="card-body">
+                <ul>
+                    {% for c in carrito %}
+                        <li><b>{% translate "Marca" %}: </b>{{c.cantidad}} {{ c.producto }} - {% widthratio c.producto.precio 1 c.cantidad %}€</li>
+                    {% endfor %}
+                </ul>
+                <p>{% translate "total" %}={{precio_total}}€</p>
+                <form class="form-login" method="post" action={% url "carrito checkout" %}>
+                    {% csrf_token %}
+                    {% for f in form %}
+                        <div class="mb-3"><label>{{ f.label }}</label>{{ f }}</div>
+                        {{ f.errors }}
+                    {% endfor %}
+                    <button type="submit" class="btn btn-success mt-3">{% translate "Confirmar" %}</button>
+                </form>
+                <a class="btn btn-secondary w-100" href="javascript:history.back()">{% translate "Volver" %}</a>
+                
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load i18n %}
+
+{% block content %}
+	<h2 class="text-center h1 mt-3 mb-5">Tu usuario</h2>
+	<hr>
+	<div class="card text-black col-4 float-start" style="height: 630px">
+		<div class="card-body">
+			<h2 class="h2 card-title text-center">{{ cliente.user }}</h2>
+			<div class="card-body">
+				<p>{% translate "Nombre" %}: {{cliente.user.first_name}}</p>
+				<p>{% translate "Apellidos" %}: {{cliente.user.last_name}}</p>
+				<p>{% translate "Email" %}: {{cliente.user.email}}</p>
+				<p>{% translate "Saldo" %}: {{cliente.saldo}}€</p>
+			</div>
+		</div>
+		<a href="{% url 'update_user' pk=user.pk %}" class="btn btn-info mt-auto m-3">{% translate "Editar" %}</a>
+	</div>
+	<div class="row">
+		<h2 class="text-center">{% translate "Direcciones" %}<a href="{% url 'add_direccion' %}" class="ms-3 btn btn-sm btn-success">{% translate "Añadir" %}</a></h2>
+		<div class="col-12 mb-3 overflow-auto" style="height: 250px">
+			<table class="table table-striped table-dark text-center">
+				<tr>
+					<th>{% translate "Nombre" %}</th>
+					<th>{% translate "Número de teléfono" %}</th>
+					<th>{% translate "Dirección" %}</th>
+					<th>{% translate "Código postal" %}</th>
+					<th>{% translate "Ciudad" %}</th>
+					<th></th>
+					<th></th>
+				</tr>
+				{% for d in direcciones %}
+        		<tr>
+        		    <td>
+        		        {{ d.nombre }}
+        		    </td>
+        		    <td class="align-middle">
+        		        {{ d.numero_de_telefono }}
+        		    </td>
+        		    <td class="align-middle">
+        		        {{ d.linea_de_direccion }}
+        		    </td>
+        		    <td class="align-middle">
+        		        {{ d.codigo_postal }}
+        		    </td>
+        		    <td class="align-middle">
+        		        {{ d.ciudad }}
+        		    </td>
+					<td class="align-middle">
+        		        <a href="{% url 'update_direccion' pk=d.pk %}" class="btn btn-sm btn-info">{% translate "Editar" %}</a>
+        		    </td>
+					<td class="align-middle">
+        		        <a href="{% url 'delete_direccion' pk=d.pk %}" class="btn btn-sm btn-danger">{% translate "Borrar" %}</a>
+        		    </td>
+        		</tr>
+        		{% endfor %}
+			</table>
+		</div>
+		<h2 class="text-center">{% translate "Tarjetas" %}<a href="{% url 'add_tarjeta' %}" class="ms-3 btn btn-sm btn-success">{% translate "Añadir" %}</a></h2>
+		<div class="col-12 overflow-auto" style="height: 250px">
+			<table class="table table-striped table-dark text-center">
+				<tr>
+					<th>{% translate "Titular" %}</th>
+					<th>{% translate "Número" %}</th>
+					<th>{% translate "Fecha de expiración" %}</th>
+					<th></th>
+					<th></th>
+				</tr>
+				{% for t in tarjetas %}
+        		<tr>
+        		    <td>
+        		        {{ t.titular }}
+        		    </td>
+        		    <td class="align-middle">
+        		        ************{{ t.cc_number|slice:"-4:" }}
+        		    </td>
+        		    <td class="align-middle">
+        		        {{ t.cc_expiry }}
+        		    </td>
+					<td class="align-middle">
+        		        <a href="{% url 'update_tarjeta' pk=t.pk %}" class="btn btn-sm btn-info">{% translate "Editar" %}</a>
+        		    </td>
+					<td class="align-middle">
+        		        <a href="{% url 'delete_tarjeta' pk=t.pk %}" class="btn btn-sm btn-danger">{% translate "Borrar" %}</a>
+        		    </td>
+        		</tr>
+        		{% endfor %}
+			</table>
+		</div>
+		
+	</div>
+{% endblock %}

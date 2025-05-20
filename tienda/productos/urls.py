@@ -9,4 +9,5 @@ urlpatterns = [
     path('registration/login', include('django.contrib.auth.urls')),
     path('logout/', cerrar_sesion, name='logout'),
     path('productos/<int:id>/', detalle_producto, name='detalle_producto'),
+    path('perfil/editar/', views.editar_perfil, name='editar_perfil'),
 ]

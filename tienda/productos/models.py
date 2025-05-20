@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
+
 
 class Producto(models.Model):
     COLORES_CHOICES = [
@@ -21,3 +23,12 @@ class Producto(models.Model):
 
     def __str__(self):
         return f"{self.marca} - {self.modelo}"
+    
+
+class Perfil(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    imagen = models.ImageField(upload_to='avatars/', default='avatars/default.jpeg')
+    bio = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"Perfil de {self.user.username}"

@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from .models import Perfil
 from productos.models import Producto
 
 class RegistroUsuarioForm(UserCreationForm):
@@ -33,3 +34,13 @@ class PersonalizacionForm(forms.Form):
     tipo = forms.ChoiceField(choices=PERSONALIZACION_TIPO, widget=forms.RadioSelect)
     frase = forms.CharField(required=False, widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 2}))
     imagen = forms.ImageField(required=False)
+
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email']
+
+class PerfilUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Perfil
+        fields = ['imagen', 'bio']

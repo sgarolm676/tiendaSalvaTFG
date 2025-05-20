@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Producto
-from .forms import RegistroUsuarioForm, PersonalizacionForm
+from .forms import RegistroUsuarioForm, PersonalizacionForm, UserUpdateForm, PerfilUpdateForm
+
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.shortcuts import redirect
@@ -57,3 +58,23 @@ def detalle_producto(request, id):
         'form': form,
         'colores_disponibles': colores_disponibles,
     })
+
+@login_required
+def editar_perfil(request):
+    if request.method == 'POST':
+        user_form = UserUpdateForm(request.POST, instance=request.user)
+        perfil_form = PerfilUpdateForm(request.POST, request.FILES, instance=request.user.perfil)
+        if user_form.is_valid() and perfil_form.is_valid():
+            user_form.save()
+            perfil_form.save()
+            messages.success(request, 'Perfil actualizado correctamente.')
+            return redirect('perfil')
+    else:
+        user_form = UserUpdateForm(instance=request.user)
+        perfil_form = PerfilUpdateForm(instance=request.user.perfil)
+
+    context = {
+        'user_form': user_form,
+        'perfil_form': perfil_form
+    }
+    return render(request, 'perfil/editar_perfil.html', context)

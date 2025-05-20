@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>{{ producto.marca }} - {{ producto.modelo }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <div class="container mt-4">
+    <!-- Encabezado con volver y TechCore -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <a href="{% url 'lista_productos' %}" class="btn btn-secondary">&larr; Volver al catálogo</a>
+      <h3 class="text-primary fw-bold">TechCore</h3>
+    </div>
+
+    <!-- Card principal del producto -->
+    <div class="card mb-4 shadow-sm">
+      <div class="row g-0 align-items-center">
+        <div class="col-md-6 text-center">
+          <img src="{{ producto.imagen.url }}" alt="{{ producto.marca }}" class="img-fluid rounded-start p-3">
+        </div>
+        <div class="col-md-6">
+          <div class="card-body">
+            <h4 class="card-title fw-bold">{{ producto.marca }}</h4>
+            <p class="card-text text-muted">{{ producto.modelo }}</p>
+            <hr>
+            <p><strong>Precio:</strong> {{ producto.precio }} €</p>
+            <p><strong>Unidades disponibles:</strong> {{ producto.unidades }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card desplegable -->
+    <div class="card">
+      <div class="card-header">
+        <button class="btn btn-outline-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#infoProducto"
+          aria-expanded="false" aria-controls="infoProducto">
+          Personalización del producto
+        </button>
+      </div>
+      <div class="collapse" id="infoProducto">
+        <form method="post" enctype="multipart/form-data" class="p-4 border rounded bg-light">
+          {% csrf_token %}
+
+          <div class="mb-4 row">
+            <label for="{{ form.color.id_for_label }}" class="col-sm-4 col-form-label fw-semibold">Color del producto</label>
+            <div class="col-sm-8">
+              {{ form.color }}
+            </div>
+          </div>
+
+          <div class="mb-4 row">
+            <label for="{{ form.posicion.id_for_label }}" class="col-sm-4 col-form-label fw-semibold">¿Dónde quieres personalizarlo?</label>
+            <div class="col-sm-8">
+              {{ form.posicion }}
+            </div>
+          </div>
+
+          <div class="mb-4 row">
+            <label for="{{ form.tipo.id_for_label }}" class="col-sm-4 col-form-label fw-semibold">¿Qué deseas incluir?</label>
+            <div class="col-sm-8">
+              {{ form.tipo }}
+            </div>
+          </div>
+
+          <div id="div-frase" class="mb-4 row">
+            <label for="{{ form.frase.id_for_label }}" class="col-sm-4 col-form-label">Frase personalizada</label>
+            <div class="col-sm-8">
+              {{ form.frase }}
+            </div>
+          </div>
+
+          <div id="div-imagen" class="mb-4 row">
+            <label for="{{ form.imagen.id_for_label }}" class="col-sm-4 col-form-label">Subir imagen personalizada</label>
+            <div class="col-sm-8">
+              {{ form.imagen }}
+            </div>
+          </div>
+
+          <div class="text-center">
+            <button type="submit" class="btn btn-success px-4">Aplicar personalización</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    const posicion = document.getElementById('{{ form.posicion.id_for_label }}');
+    const tipo = document.getElementById('{{ form.tipo.id_for_label }}');
+    const frase = document.getElementById('div-frase');
+    const imagen = document.getElementById('div-imagen');
+
+    function actualizarTipoOpciones() {
+      if (posicion.value === 'lateral') {
+        // Solo permitir "frase"
+        // Si tu form.tipo es un select, deshabilita otras opciones excepto "frase"
+        for (let option of tipo.options) {
+          option.disabled = option.value !== 'frase';
+        }
+        tipo.value = 'frase';
+      } else if (posicion.value === 'trasero') {
+        // Permitir todas las opciones
+        for (let option of tipo.options) {
+          option.disabled = false;
+        }
+      }
+      mostrarCampos(); // Actualiza campos visibles según tipo seleccionado
+    }
+
+    function mostrarCampos() {
+      if (tipo.value === 'frase') {
+        frase.style.display = 'flex';
+        imagen.style.display = 'none';
+      } else if (tipo.value === 'imagen') {
+        frase.style.display = 'none';
+        imagen.style.display = 'flex';
+      } else {
+        frase.style.display = 'none';
+        imagen.style.display = 'none';
+      }
+    }
+
+    posicion.addEventListener('change', actualizarTipoOpciones);
+    tipo.addEventListener('change', mostrarCampos);
+
+    // Inicializar estados al cargar la página
+    actualizarTipoOpciones();
+  </script>
+
+</body>
+
+</html>

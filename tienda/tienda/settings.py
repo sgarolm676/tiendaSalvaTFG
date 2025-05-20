@@ -98,8 +98,9 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-LOGIN_REDIRECT_URL = 'lista_productos'  # Página después del login
-LOGOUT_REDIRECT_URL = ''  # Página después del logout
+ # Página después del login
+LOGIN_REDIRECT_URL = 'lista_productos'  
+LOGOUT_REDIRECT_URL = 'login'  # Página después del logout     
 import os
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

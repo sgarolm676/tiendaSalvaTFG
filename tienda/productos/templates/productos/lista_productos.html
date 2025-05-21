@@ -1,123 +1,166 @@
-    <!DOCTYPE html>
-    <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>TechCore - Catálogo</title>
-        <!-- Bootstrap CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Font Awesome para iconos -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-        <style>
-            .techcore-header {
-                border-bottom: 1px solid #eee;
-                margin-bottom: 30px;
-                padding: 20px 0;
-            }
-            .product-card {
-                border: none;
-                border-radius: 8px;
-                box-shadow: 0 2px 15px rgba(0,0,0,0.08);
-                transition: transform 0.3s ease;
-                height: 100%;
-            }
-            .product-card:hover {
-                transform: translateY(-5px);
-            }
-            .product-body {
-                padding: 1.5rem;
-            }
-            .product-image {
-                width: 100%;
-                height: 250px;
-                object-fit: cover;
-                border-radius: 8px 8px 0 0;
-            }
-            .user-actions {
-                position: absolute;
-                top: 20px;
-                right: 20px;
-            }
-            .dropdown-user {
-                cursor: pointer;
-            }
-        </style>
-    </head>
-    <body>
-    <div class="container">
-        <!-- Header con título y acciones de usuario -->
-        <header class="techcore-header position-relative">
-            <div class="row align-items-center">
-                <div class="col">
-                    <h1 class="display-4 fw-bold">TechCore</h1>
-                    <p class="text-muted">Tecnología de vanguardia</p>
-                </div>
-                <div class="col-auto user-actions">
-                    {% if user.is_authenticated %}
-                        <div class="dropdown">
-                            <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="https://cdn-icons-png.flaticon.com/512/9131/9131529.png" alt="avatar" width="40" height="40" class="rounded-circle me-2">
-                                <strong>Hola, {{ user.username }}</strong>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end text-small shadow" aria-labelledby="dropdownUser">
-                                <li><a class="dropdown-item" href="{% url 'editar_perfil' %}"><i class="fas fa-user me-2"></i>Perfil</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
-                                        {% csrf_token %}
-                                    </form>
-                                    <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        <i class="fas fa-sign-out-alt me-2"></i>Cerrar sesión
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    {% else %}
-                        <a href="{% url 'login' %}" class="btn btn-outline-primary me-2">
-                            <i class="fas fa-sign-in-alt me-1"></i> Iniciar sesión
-                        </a>
-                        <a href="{% url 'register' %}" class="btn btn-primary">
-                            <i class="fas fa-user-plus me-1"></i> Registrarse
-                        </a>
-                    {% endif %}
-                </div>
-            </div>
-        </header>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TechCore - Catálogo</title>
 
-        <!-- Grid de productos -->
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-            {% if productos %}
-                {% for producto in productos %}
-                    <div class="col">
-                        <div class="card product-card h-100">
-                            <img src="{{ producto.imagen.url }}" alt="{{ producto.marca }}" class="product-image">
-                            <div class="card-body product-body text-center">
-                                <h5 class="card-title fw-bold">{{ producto.marca }}</h5>
-                                <p class="card-text text-muted">{{ producto.modelo }}</p>
-                                {% if user.is_authenticated %}
-                                    <a href="{% url 'detalle_producto' producto.id %}" class="btn btn-outline-primary mt-3">
-                                        <i class="fas fa-eye me-1"></i> Ver detalles
-                                    </a>
-                                {% else %}
-                                    <a href="{% url 'login' %}?next={% url 'detalle_producto' producto.id %}" class="btn btn-outline-primary mt-3">
-                                        <i class="fas fa-eye me-1"></i> Ver detalles
-                                    </a>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <div class="col-12">
-                    <div class="alert alert-light text-center">
-                        No hay productos disponibles actualmente.
-                    </div>
-                </div>
-            {% endif %}
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-color: #6c757d;
+      --accent-color: #adb5bd;
+      --text-dark: #343a40;
+      --text-light: #6c757d;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8f9fa;
+      color: var(--text-dark);
+    }
+
+    .techcore-header {
+      border-bottom: 1px solid #dee2e6;
+      margin-bottom: 30px;
+      padding: 20px 0;
+    }
+
+    .techcore-header h1 {
+      font-weight: 700;
+      color: var(--primary-color);
+    }
+
+    .product-card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 0.15rem 1rem rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+      height: 100%;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .product-image {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 15px 15px 0 0;
+    }
+
+    .product-body {
+      padding: 1.5rem;
+    }
+
+    .btn-outline-primary {
+      color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+
+    .btn-outline-primary:hover {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .dropdown-user img {
+      border: 2px solid white;
+      box-shadow: 0 0.1rem 0.4rem rgba(0,0,0,0.1);
+    }
+
+    .dropdown-menu {
+      border-radius: 10px;
+    }
+
+    .user-actions {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="techcore-header position-relative">
+      <div class="row align-items-center">
+        <div class="col">
+          <h1 class="display-5">TechCore</h1>
+          <p class="text-muted">Tecnología de vanguardia</p>
         </div>
-    </div>
+        <div class="col-auto user-actions">
+          {% if user.is_authenticated %}
+            <div class="dropdown dropdown-user">
+              <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                {% if user.perfil.imagen and user.perfil.imagen.url != '/media/avatars/default.jpeg' %}
+                  <img src="{{ user.perfil.imagen.url }}" alt="avatar" width="40" height="40" class="rounded-circle me-2">
+                {% else %}
+                  <img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/icons/person-circle.svg" alt="avatar" width="40" height="40" class="rounded-circle me-2">
+                {% endif %}
+                <strong class="text-dark">Hola, {{ user.username }}</strong>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="dropdownUser">
+                <li><a class="dropdown-item" href="{% url 'editar_perfil' %}"><i class="fas fa-user me-2"></i>Perfil</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">{% csrf_token %}</form>
+                  <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <i class="fas fa-sign-out-alt me-2"></i>Cerrar sesión
+                  </a>
+                </li>
+              </ul>
+            </div>
+          {% else %}
+            <a href="{% url 'login' %}" class="btn btn-outline-primary me-2"><i class="fas fa-sign-in-alt me-1"></i> Iniciar sesión</a>
+            <a href="{% url 'register' %}" class="btn btn-primary"><i class="fas fa-user-plus me-1"></i> Registrarse</a>
+          {% endif %}
+        </div>
+      </div>
+    </header>
 
-    <!-- Bootstrap JS Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    </body>
-    </html>
+    <!-- Productos -->
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      {% if productos %}
+        {% for producto in productos %}
+          <div class="col">
+            <div class="card product-card h-100">
+              <img src="{{ producto.imagen.url }}" alt="{{ producto.marca }}" class="product-image">
+              <div class="card-body product-body text-center">
+                <h5 class="card-title fw-semibold">{{ producto.marca }}</h5>
+                <p class="card-text text-muted">{{ producto.modelo }}</p>
+                {% if user.is_authenticated %}
+                  <a href="{% url 'detalle_producto' producto.id %}" class="btn btn-outline-primary mt-3">
+                    <i class="fas fa-eye me-1"></i> Ver detalles
+                  </a>
+                {% else %}
+                  <a href="{% url 'login' %}?next={% url 'detalle_producto' producto.id %}" class="btn btn-outline-primary mt-3">
+                    <i class="fas fa-eye me-1"></i> Ver detalles
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="col-12">
+          <div class="alert alert-light text-center">
+            No hay productos disponibles actualmente.
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Bootstrap Bundle con Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -68,7 +68,7 @@ def editar_perfil(request):
             user_form.save()
             perfil_form.save()
             messages.success(request, 'Perfil actualizado correctamente.')
-            return redirect('perfil')
+            return redirect('lista_productos')  # redirige a lista de productos
     else:
         user_form = UserUpdateForm(instance=request.user)
         perfil_form = PerfilUpdateForm(instance=request.user.perfil)

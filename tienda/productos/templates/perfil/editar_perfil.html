@@ -1,12 +1,238 @@
-{% load static %}
-{% block content %}
-<div class="container mt-4">
-  <h2>Editar Perfil</h2>
-  <form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ user_form.as_p }}
-    {{ perfil_form.as_p }}
-    <button type="submit" class="btn btn-primary">Guardar cambios</button>
-  </form>
-</div>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Editar Perfil | MiAplicación</title>
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-color: #6c757d;
+      --accent-color: #adb5bd;
+      --text-dark: #343a40;
+      --text-light: #6c757d;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8f9fa;
+      color: var(--text-dark);
+    }
+
+    .navbar {
+      background-color: #e9ecef;
+    }
+
+    .navbar-brand {
+      font-weight: 600;
+      font-size: 1.25rem;
+    }
+
+    .nav-link {
+      font-weight: 500;
+      color: var(--text-dark) !important;
+    }
+
+    .nav-link:hover {
+      color: var(--primary-color) !important;
+    }
+
+    .nav-link.active {
+      font-weight: 600;
+      text-decoration: underline;
+    }
+
+    .card {
+      border-radius: 15px;
+      border: none;
+      box-shadow: 0 0.15rem 1rem rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 1.5rem;
+      border-bottom: none;
+    }
+
+    .form-control, .form-select {
+      border-radius: 8px;
+      padding: 10px 15px;
+    }
+
+    .profile-img-container {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      margin: 0 auto 20px;
+    }
+
+    .profile-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid white;
+    }
+
+    .img-upload-btn {
+      position: absolute;
+      bottom: -10px;
+      right: -10px;
+      width: 40px;
+      height: 40px;
+      background: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .img-upload-btn:hover {
+      background: var(--accent-color);
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .btn-save {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      font-weight: 600;
+    }
+
+    .section-title {
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+
+    @media (max-width: 768px) {
+      .profile-img-container {
+        width: 120px;
+        height: 120px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#"><i class="fas fa-home me-1"></i> Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="#"><i class="fas fa-user me-1"></i> Perfil</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"><i class="fas fa-cog me-1"></i> Configuración</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'lista_productos' %}"><i class="fas fa-sign-out-alt me-1"></i> Salir</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contenido -->
+  <div class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-10 col-xl-8">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="mb-0"><i class="fas fa-user-edit me-2"></i>Editar Perfil</h4>
+          </div>
+          <div class="card-body p-4">
+            <form method="POST" enctype="multipart/form-data" novalidate>
+              {% csrf_token %}
+              <div class="row">
+                <!-- Imagen -->
+                <div class="col-md-4 text-center mb-4 mb-md-0">
+                  <div class="profile-img-container">
+                    <img src="{{ user.perfil.imagen.url }}" alt="Avatar" class="profile-img">
+                    <label for="id_imagen" class="img-upload-btn">
+                      <i class="fas fa-camera"></i>
+                    </label>
+                    {{ perfil_form.imagen }}
+                  </div>
+                  <small id="nombre-archivo" class="text-muted d-block mt-2">Ningún archivo seleccionado</small>
+                </div>
+
+                <!-- Formulario -->
+                <div class="col-md-8">
+                  <h5 class="section-title">Información Personal</h5>
+
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label for="{{ user_form.first_name.id_for_label }}" class="form-label">Nombre</label>
+                      {{ user_form.first_name }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="{{ user_form.last_name.id_for_label }}" class="form-label">Apellidos</label>
+                      {{ user_form.last_name }}
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="{{ user_form.email.id_for_label }}" class="form-label">Correo electrónico</label>
+                    {{ user_form.email }}
+                  </div>
+
+                  <h5 class="section-title mt-4">Acerca de ti</h5>
+                  <div class="mb-3">
+                    <label for="{{ perfil_form.bio.id_for_label }}" class="form-label">Biografía</label>
+                    {{ perfil_form.bio }}
+                    <div class="form-text">Cuéntanos algo sobre ti (máx. 500 caracteres)</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+                <button type="button" class="btn btn-outline-secondary">
+                  <i class="fas fa-times me-1"></i> Cancelar
+                </button>
+                <button type="submit" class="btn btn-save">
+                  <i class="fas fa-save me-1"></i> Guardar cambios
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap Bundle con Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Script cambio de archivo en español -->
+  <script>
+    document.getElementById('id_imagen').addEventListener('change', function(e) {
+      const archivo = e.target.files[0];
+      const mensaje = archivo ? 'Archivo seleccionado: ' + archivo.name : 'Ningún archivo seleccionado';
+      document.getElementById('nombre-archivo').textContent = mensaje;
+    });
+  </script>
+</body>
+</html>

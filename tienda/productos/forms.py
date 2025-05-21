@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Perfil
+from .models import Perfil, DireccionEnvio, TarjetaPago
 from productos.models import Producto
 
 class RegistroUsuarioForm(UserCreationForm):
@@ -52,4 +52,18 @@ class PerfilUpdateForm(forms.ModelForm):
         widgets = {
             'imagen': forms.ClearableFileInput(attrs={'class': 'form-control'}),
             'bio': forms.Textarea(attrs={'class': 'form-control'}),
+        }
+
+class DireccionEnvioForm(forms.ModelForm):
+    class Meta:
+        model = DireccionEnvio
+        fields = ['nombre_completo', 'direccion', 'ciudad', 'codigo_postal', 'pais']
+
+class TarjetaPagoForm(forms.ModelForm):
+    class Meta:
+        model = TarjetaPago
+        fields = ['titular', 'numero', 'expiracion', 'cvv']
+        widgets = {
+            'numero': forms.PasswordInput(render_value=True),
+            'cvv': forms.PasswordInput(render_value=True),
         }

@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Producto
-from .forms import RegistroUsuarioForm, PersonalizacionForm, UserUpdateForm, PerfilUpdateForm
+from .models import Producto, Perfil, DireccionEnvio, TarjetaPago
+from .forms import RegistroUsuarioForm, PersonalizacionForm, UserUpdateForm, PerfilUpdateForm, DireccionEnvioForm, TarjetaPagoForm
 
 from django.contrib import messages
 from django.contrib.auth import logout
@@ -78,3 +78,24 @@ def editar_perfil(request):
         'perfil_form': perfil_form
     }
     return render(request, 'perfil/editar_perfil.html', context)
+
+def configuracion_usuario(request):
+    direccion, _ = DireccionEnvio.objects.get_or_create(usuario=request.user)
+    tarjeta, _ = TarjetaPago.objects.get_or_create(usuario=request.user)
+
+    if request.method == 'POST':
+        direccion_form = DireccionEnvioForm(request.POST, instance=direccion)
+        tarjeta_form = TarjetaPagoForm(request.POST, instance=tarjeta)
+        if direccion_form.is_valid() and tarjeta_form.is_valid():
+            direccion_form.save()
+            tarjeta_form.save()
+            messages.success(request, "Configuración actualizada correctamente.")
+            return redirect('configuracion')
+    else:
+        direccion_form = DireccionEnvioForm(instance=direccion)
+        tarjeta_form = TarjetaPagoForm(instance=tarjeta)
+
+    return render(request, 'perfil/configuracion.html', {
+        'direccion_form': direccion_form,
+        'tarjeta_form': tarjeta_form
+    })

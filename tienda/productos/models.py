@@ -32,3 +32,24 @@ class Perfil(models.Model):
 
     def __str__(self):
         return f"Perfil de {self.user.username}"
+    
+class DireccionEnvio(models.Model):
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE, related_name='direccionenvio')
+    nombre_completo = models.CharField(max_length=100)
+    direccion = models.CharField(max_length=255)
+    ciudad = models.CharField(max_length=100)
+    codigo_postal = models.CharField(max_length=10)
+    pais = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"{self.nombre_completo} ({self.usuario.username})"
+    
+class TarjetaPago(models.Model):
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE, related_name='tarjetapago')
+    titular = models.CharField(max_length=100)
+    numero = models.CharField(max_length=16)
+    expiracion = models.CharField(max_length=5)  # formato MM/YY
+    cvv = models.CharField(max_length=4)
+
+    def __str__(self):
+        return f"Tarjeta de {self.titular} ({self.usuario.username})"

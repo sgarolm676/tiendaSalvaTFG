@@ -1,170 +1,84 @@
-<!-- plantilla carrito.html (lo que ya tienes, modificando solo el botón "Proceder al pago") -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tu Carrito de Compras</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <style>
-    body {
-      padding: 20px;
-      background-color: #f8f9fa;
-    }
-    .table {
-      background-color: white;
-      box-shadow: 0 0.15rem 1rem rgba(0, 0, 0, 0.05);
-    }
-    .text-muted {
-      color: #6c757d !important;
-    }
-    .btn-sm {
-      padding: 0.25rem 0.5rem;
-    }
-    #card-element {
-      border: 1px solid #ced4da;
-      padding: 10px;
-      border-radius: 5px;
-    }
-    #card-errors {
-      color: red;
-      margin-top: 10px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tu Carrito de Compras</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .table {
+            background-color: white;
+            box-shadow: 0 0.15rem 1rem rgba(0, 0, 0, 0.05);
+        }
+        .text-muted {
+            color: #6c757d!important;
+        }
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h2><i class="fas fa-shopping-cart"></i> Tu carrito</h2>
+    <div class="container">
+        <h2><i class="fas fa-shopping-cart"></i> Tu carrito</h2>
 
-    {% if carrito.items.all %}
-    <div class="table-responsive">
-      <table class="table table-hover">
-        <thead class="table-light">
-          <tr>
-            <th>Producto</th>
-            <th>Precio</th>
-            <th>Cantidad</th>
-            <th>Total</th>
-            <th>Acción</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for item in carrito.items.all %}
-          <tr>
-            <td>
-              {{ item.producto.marca }} - {{ item.producto.modelo }}
-              {% if item.personalizado %}
-              <br /><small class="text-muted"><i class="fas fa-paint-brush"></i> Personalizado</small>
-              {% endif %}
-            </td>
-            <td>€{{ item.producto.precio }}</td>
-            <td>{{ item.cantidad }}</td>
-            <td>€{{ item.producto.precio|floatformat:2 }}</td>
-            <td>
-              <a href="{% url 'eliminar_del_carrito' item.id %}" class="btn btn-danger btn-sm">
-                <i class="fas fa-trash-alt"></i>
-              </a>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-    {% else %}
-    <div class="alert alert-info" role="alert">
-      <i class="fas fa-info-circle"></i> Tu carrito está vacío.
-    </div>
-    {% endif %}
-
-    <div class="mt-4">
-      <a href="/" class="btn btn-outline-primary">
-        <i class="fas fa-arrow-left"></i> Seguir comprando
-      </a>
-
-      {% if carrito.items.all %}
-      <!-- Botón que abre el modal de pago -->
-      <button type="button" class="btn btn-success float-end" data-bs-toggle="modal" data-bs-target="#paymentModal">
-        <i class="fas fa-credit-card"></i> Proceder al pago
-      </button>
-      {% endif %}
-    </div>
-  </div>
-
-  <!-- Modal para formulario de pago -->
-  <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="paymentModalLabel">Formulario de Pago</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        {% if carrito.items.all %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Producto</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th>Total</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in carrito.items.all %}
+                    <tr>
+                        <td>
+                            {{ item.producto.marca }} - {{ item.producto.modelo }}
+                            {% if item.personalizado %}
+                                <br><small class="text-muted"><i class="fas fa-paint-brush"></i> Personalizado</small>
+                            {% endif %}
+                        </td>
+                        <td>€{{ item.producto.precio }}</td>
+                        <td>{{ item.cantidad }}</td>
+                        <td>€{{ item.producto.precio|floatformat:2 }}</td>
+                        <td>
+                            <a href="{% url 'eliminar_del_carrito' item.id %}" class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-        <div class="modal-body">
-          <form id="payment-form" novalidate>
-            <div id="card-element"></div>
-            <div id="card-errors" role="alert"></div>
-            <button id="submit" class="btn btn-primary mt-3">Pagar</button>
-          </form>
+        {% else %}
+        <div class="alert alert-info" role="alert">
+            <i class="fas fa-info-circle"></i> Tu carrito está vacío.
         </div>
-      </div>
-    </div>
-  </div>
+        {% endif %}
 
-  <!-- Modal para pago exitoso -->
-  <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-body text-center p-4">
-          <h4>¡Pago realizado con éxito!</h4>
-          <button type="button" class="btn btn-success mt-3" data-bs-dismiss="modal">Cerrar</button>
+        <div class="mt-4">
+            <a href="/" class="btn btn-outline-primary">
+                <i class="fas fa-arrow-left"></i> Seguir comprando
+            </a>
+            {% if carrito.items.all %}
+            <a href="{% url 'checkout' %}" class="btn btn-success float-end">
+                <i class="fas fa-credit-card"></i> Proceder al pago
+            </a>
+            {% endif %}
         </div>
-      </div>
     </div>
-  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://js.stripe.com/v3/"></script>
-  <script>
-    const stripe = Stripe('{{ stripe_publishable_key }}');
-    const elements = stripe.elements();
-    const card = elements.create('card');
-
-    // Montar card-element cuando el modal se abra
-    const paymentModal = document.getElementById('paymentModal');
-    paymentModal.addEventListener('shown.bs.modal', () => {
-      if (!card._mounted) {
-        card.mount('#card-element');
-        card._mounted = true;
-      }
-    });
-
-    const form = document.getElementById('payment-form');
-    const cardErrors = document.getElementById('card-errors');
-
-    card.on('change', ({ error }) => {
-      cardErrors.textContent = error ? error.message : '';
-    });
-
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault();
-
-      const { token, error } = await stripe.createToken(card);
-
-      if (error) {
-        cardErrors.textContent = error.message;
-      } else {
-        // Aquí en un TFG simula éxito y cierra el modal de pago
-        // y abre el modal de éxito:
-        cardErrors.textContent = '';
-        paymentModalModalInstance = bootstrap.Modal.getInstance(paymentModal);
-        paymentModalModalInstance.hide();
-
-        const successModal = new bootstrap.Modal(document.getElementById('successModal'));
-        successModal.show();
-
-        // Si quieres, podrías hacer aquí un fetch/post real o redirigir después
-      }
-    });
-  </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

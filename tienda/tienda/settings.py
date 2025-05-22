@@ -102,9 +102,9 @@ import os
 
 from dotenv import load_dotenv
 load_dotenv()
+"""
 
-STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
-STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY')
+"""
 
 LOGIN_REDIRECT_URL = 'lista_productos' # Página después del login 
 LOGOUT_REDIRECT_URL = 'lista_productos' # Página después del logout  

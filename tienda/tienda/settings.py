@@ -100,7 +100,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
  # Página después del login
 LOGIN_REDIRECT_URL = 'lista_productos'  
-LOGOUT_REDIRECT_URL = 'login'  # Página después del logout     
+LOGOUT_REDIRECT_URL = 'lista_productos'  # Página después del logout     
 import os
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

@@ -53,3 +53,16 @@ class TarjetaPago(models.Model):
 
     def __str__(self):
         return f"Tarjeta de {self.titular} ({self.usuario.username})"
+    
+
+class Carrito(models.Model):
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
+
+class ItemCarrito(models.Model):
+    carrito = models.ForeignKey(Carrito, on_delete=models.CASCADE, related_name='items')
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    cantidad = models.PositiveIntegerField(default=1)
+    personalizado = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.producto.marca} ({'Personalizado' if self.personalizado else 'Normal'})"

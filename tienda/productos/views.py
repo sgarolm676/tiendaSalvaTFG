@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Producto, Perfil, DireccionEnvio, TarjetaPago
+from .models import Producto, Perfil, DireccionEnvio, TarjetaPago, Carrito, ItemCarrito
 from .forms import RegistroUsuarioForm, PersonalizacionForm, UserUpdateForm, PerfilUpdateForm, DireccionEnvioForm, TarjetaPagoForm
 
 from django.contrib import messages
@@ -101,3 +101,30 @@ def configuracion_usuario(request):
         'direccion': direccion,
         'tarjeta': tarjeta,
     })
+
+@login_required
+def agregar_al_carrito(request, producto_id):
+    print("✅ Entró en la vista de agregar al carrito")  # DEBUG
+
+    producto = get_object_or_404(Producto, id=producto_id)
+    personalizado = request.POST.get('personalizado') == 'True'
+
+    carrito, _ = Carrito.objects.get_or_create(usuario=request.user)
+    ItemCarrito.objects.create(
+        carrito=carrito,
+        producto=producto,
+        cantidad=1,
+        personalizado=personalizado
+    )
+    return redirect('ver_carrito')
+
+@login_required
+def eliminar_del_carrito(request, item_id):
+    item = get_object_or_404(ItemCarrito, id=item_id)
+    item.delete()
+    return redirect('ver_carrito')
+
+@login_required
+def ver_carrito(request):
+    carrito, _ = Carrito.objects.get_or_create(usuario=request.user)
+    return render(request, 'carrito/ver_carrito.html', {'carrito': carrito})

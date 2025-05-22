@@ -100,11 +100,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 import os
 
-from dotenv import load_dotenv
-load_dotenv()
-"""
 
-"""
 
 LOGIN_REDIRECT_URL = 'lista_productos' # Página después del login 
 LOGOUT_REDIRECT_URL = 'lista_productos' # Página después del logout  

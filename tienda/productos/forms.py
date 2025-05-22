@@ -57,13 +57,22 @@ class PerfilUpdateForm(forms.ModelForm):
 class DireccionEnvioForm(forms.ModelForm):
     class Meta:
         model = DireccionEnvio
-        fields = ['nombre_completo', 'direccion', 'ciudad', 'codigo_postal', 'pais']
+        fields = '__all__'
+        widgets = {
+            'nombre_completo': forms.TextInput(attrs={'class': 'form-control'}),
+            'direccion': forms.TextInput(attrs={'class': 'form-control'}),
+            'ciudad': forms.TextInput(attrs={'class': 'form-control'}),
+            'codigo_postal': forms.TextInput(attrs={'class': 'form-control'}),
+            'pais': forms.TextInput(attrs={'class': 'form-control'}),
+        }
 
 class TarjetaPagoForm(forms.ModelForm):
     class Meta:
         model = TarjetaPago
-        fields = ['titular', 'numero', 'expiracion', 'cvv']
+        fields = '__all__'
         widgets = {
-            'numero': forms.PasswordInput(render_value=True),
-            'cvv': forms.PasswordInput(render_value=True),
+            'titular': forms.TextInput(attrs={'class': 'form-control'}),
+            'numero': forms.TextInput(attrs={'class': 'form-control'}),
+            'expiracion': forms.TextInput(attrs={'class': 'form-control'}),
+            'cvv': forms.TextInput(attrs={'class': 'form-control'}),
         }

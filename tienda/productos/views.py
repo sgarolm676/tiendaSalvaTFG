@@ -97,5 +97,7 @@ def configuracion_usuario(request):
 
     return render(request, 'perfil/configuracion.html', {
         'direccion_form': direccion_form,
-        'tarjeta_form': tarjeta_form
+        'tarjeta_form': tarjeta_form,
+        'direccion': direccion,
+        'tarjeta': tarjeta,
     })

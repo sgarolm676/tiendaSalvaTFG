@@ -58,6 +58,12 @@
                         </td>
                     </tr>
                     {% endfor %}
+                    <!-- Fila del total -->
+                    <tr class="total-row">
+                        <td colspan="3" class="text-end"><strong>Total del carrito:</strong></td>
+                        <td><strong>€{{ carrito.get_total_carrito|floatformat:2 }}</strong></td>
+                        <td></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -72,7 +78,7 @@
                 <i class="fas fa-arrow-left"></i> Seguir comprando
             </a>
             {% if carrito.items.all %}
-            <a href="{% url 'checkout' %}" class="btn btn-success float-end">
+            <a class="btn btn-success float-end">
                 <i class="fas fa-credit-card"></i> Proceder al pago
             </a>
             {% endif %}

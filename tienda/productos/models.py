@@ -57,6 +57,9 @@ class TarjetaPago(models.Model):
 
 class Carrito(models.Model):
     usuario = models.OneToOneField(User, on_delete=models.CASCADE)
+    
+    def get_total_carrito(self):
+        return sum(item.get_total_item() for item in self.items.all())
 
 class ItemCarrito(models.Model):
     carrito = models.ForeignKey(Carrito, on_delete=models.CASCADE, related_name='items')
@@ -66,3 +69,9 @@ class ItemCarrito(models.Model):
 
     def __str__(self):
         return f"{self.producto.marca} ({'Personalizado' if self.personalizado else 'Normal'})"
+    def get_total_item(self):
+        return self.producto.precio * self.cantidad
+
+    
+    
+

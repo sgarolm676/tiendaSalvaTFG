@@ -108,8 +108,6 @@ def configuracion_usuario(request):
 
 @login_required
 def agregar_al_carrito(request, producto_id):
-    print("✅ Entró en la vista de agregar al carrito")  # DEBUG
-
     producto = get_object_or_404(Producto, id=producto_id)
     personalizado = request.POST.get('personalizado') == 'True'
 
@@ -120,7 +118,8 @@ def agregar_al_carrito(request, producto_id):
         cantidad=1,
         personalizado=personalizado
     )
-    return redirect('ver_carrito')
+    return redirect('ver_carrito')  # ✅ redirige a la vista, no al template
+
 
 @login_required
 def eliminar_del_carrito(request, item_id):
@@ -128,47 +127,11 @@ def eliminar_del_carrito(request, item_id):
     item.delete()
     return redirect('ver_carrito')
 
+
 @login_required
 def ver_carrito(request):
-    carrito = request.user.carrito  # o como accedas al carrito
+    carrito = request.user.carrito
     context = {
-        'carrito': carrito,
-        'stripe_publishable_key': settings.STRIPE_PUBLISHABLE_KEY
+        'carrito': carrito
     }
-    return render(request, 'carrito.html', context)
-
-"""
-stripe.api_key = settings.STRIPE_SECRET_KEY
-
-def checkout_view(request):
-    if request.method == 'GET':
-        # Mostrar el formulario con Stripe Elements
-        context = {
-            'stripe_publishable_key': settings.STRIPE_PUBLISHABLE_KEY
-        }
-        return render(request, 'carrito/checkout.html', context)
-    
-    elif request.method == 'POST':
-        # Procesar el pago con el token enviado desde el frontend
-        token = request.POST.get('stripeToken')
-        amount = 5000  # por ejemplo 50.00 EUR, en centavos (usa la cantidad real)
-
-        try:
-            charge = stripe.Charge.create(
-                amount=amount,
-                currency='eur',
-                description='Compra TechCore',
-                source=token,
-            )
-            # Aquí guardas en BD o lo que necesites con charge.id, etc.
-            return redirect('pago_exitoso')  # o donde quieras
-        except stripe.error.CardError as e:
-            # Error de tarjeta
-            context = {
-                'error_message': e.user_message,
-                'stripe_publishable_key': settings.STRIPE_PUBLISHABLE_KEY
-            }
-            return render(request, 'carrito/checkout.html', context)
-        
-def pago_exitoso(request):
-    return render(request, 'carrito/pago_exitoso.html')"""
+    return render(request, 'carrito/ver_carrito.html', context)  #

@@ -136,6 +136,8 @@ def ver_carrito(request):
         'stripe_publishable_key': settings.STRIPE_PUBLISHABLE_KEY
     }
     return render(request, 'carrito.html', context)
+
+"""
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 def checkout_view(request):
@@ -169,4 +171,4 @@ def checkout_view(request):
             return render(request, 'carrito/checkout.html', context)
         
 def pago_exitoso(request):
-    return render(request, 'carrito/pago_exitoso.html')
+    return render(request, 'carrito/pago_exitoso.html')"""

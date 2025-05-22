@@ -108,7 +108,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
 # settings.py
-
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51RRXWpCdXtqJTGY6anR2xe3SE7MHGh2WmicU9CkRMrktj7uONwCkqyEvR7ORWjk2vkYhhDtQfgk2wfMr9WXUapFJ00bPUc020l'
+STRIPE_SECRET_KEY = 'sk_test_51RRXWpCdXtqJTGY6WQCuapaSSjQ7gSwwG7loFrV0d1zenSsyuOe2RLN8Ja64wfrmmycMpDHpT6YCAYn2hY0bCOSv00tanOCinX'
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
+STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY')
 
 LANGUAGE_CODE = 'en-us'
 

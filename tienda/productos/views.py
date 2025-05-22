@@ -9,7 +9,11 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_POST
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-
+import stripe
+from django.conf import settings
+from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 
 def lista_productos(request):
     productos = Producto.objects.all()
@@ -126,5 +130,43 @@ def eliminar_del_carrito(request, item_id):
 
 @login_required
 def ver_carrito(request):
-    carrito, _ = Carrito.objects.get_or_create(usuario=request.user)
-    return render(request, 'carrito/ver_carrito.html', {'carrito': carrito})
+    carrito = request.user.carrito  # o como accedas al carrito
+    context = {
+        'carrito': carrito,
+        'stripe_publishable_key': settings.STRIPE_PUBLISHABLE_KEY
+    }
+    return render(request, 'carrito.html', context)
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+def checkout_view(request):
+    if request.method == 'GET':
+        # Mostrar el formulario con Stripe Elements
+        context = {
+            'stripe_publishable_key': settings.STRIPE_PUBLISHABLE_KEY
+        }
+        return render(request, 'carrito/checkout.html', context)
+    
+    elif request.method == 'POST':
+        # Procesar el pago con el token enviado desde el frontend
+        token = request.POST.get('stripeToken')
+        amount = 5000  # por ejemplo 50.00 EUR, en centavos (usa la cantidad real)
+
+        try:
+            charge = stripe.Charge.create(
+                amount=amount,
+                currency='eur',
+                description='Compra TechCore',
+                source=token,
+            )
+            # Aquí guardas en BD o lo que necesites con charge.id, etc.
+            return redirect('pago_exitoso')  # o donde quieras
+        except stripe.error.CardError as e:
+            # Error de tarjeta
+            context = {
+                'error_message': e.user_message,
+                'stripe_publishable_key': settings.STRIPE_PUBLISHABLE_KEY
+            }
+            return render(request, 'carrito/checkout.html', context)
+        
+def pago_exitoso(request):
+    return render(request, 'carrito/pago_exitoso.html')

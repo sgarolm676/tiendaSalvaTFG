@@ -13,10 +13,10 @@ import stripe
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseBadRequest
 
 def lista_productos(request):
-    productos = Producto.objects.all()
+    productos = Producto.objects.all().order_by('-ventas')  # Más vendidos primero
     return render(request, 'productos/lista_productos.html', {'productos': productos})
 
 def registrar_usuario(request):
@@ -83,6 +83,7 @@ def editar_perfil(request):
     }
     return render(request, 'perfil/editar_perfil.html', context)
 
+@login_required
 def configuracion_usuario(request):
     direccion, _ = DireccionEnvio.objects.get_or_create(usuario=request.user)
     tarjeta, _ = TarjetaPago.objects.get_or_create(usuario=request.user)
@@ -90,11 +91,17 @@ def configuracion_usuario(request):
     if request.method == 'POST':
         direccion_form = DireccionEnvioForm(request.POST, instance=direccion)
         tarjeta_form = TarjetaPagoForm(request.POST, instance=tarjeta)
+
         if direccion_form.is_valid() and tarjeta_form.is_valid():
             direccion_form.save()
-            tarjeta_form.save()
+
+            tarjeta = tarjeta_form.save(commit=False)
+            tarjeta.usuario = request.user  # asignación automática
+            tarjeta.save()
+
             messages.success(request, "Configuración actualizada correctamente.")
             return redirect('configuracion')
+
     else:
         direccion_form = DireccionEnvioForm(instance=direccion)
         tarjeta_form = TarjetaPagoForm(instance=tarjeta)
@@ -132,6 +139,107 @@ def eliminar_del_carrito(request, item_id):
 def ver_carrito(request):
     carrito = request.user.carrito
     context = {
-        'carrito': carrito
+        'carrito': carrito,
+        'STRIPE_PUBLISHABLE_KEY': settings.STRIPE_PUBLISHABLE_KEY,
     }
-    return render(request, 'carrito/ver_carrito.html', context)  #
+    return render(request, 'carrito/ver_carrito.html', context)
+@login_required
+@require_POST
+def aumentar_cantidad(request, item_id):
+    item = get_object_or_404(ItemCarrito, id=item_id, carrito__usuario=request.user)
+    item.cantidad += 1
+    item.save()
+    return redirect('ver_carrito')
+
+@login_required
+@require_POST
+def disminuir_cantidad(request, item_id):
+    item = get_object_or_404(ItemCarrito, id=item_id, carrito__usuario=request.user)
+    if item.cantidad > 1:
+        item.cantidad -= 1
+        item.save()
+    return redirect('ver_carrito')
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+@login_required
+@csrf_exempt
+def crear_checkout_session(request):
+    carrito = request.user.carrito
+    items = []
+
+    for item in carrito.items.all():
+        items.append({
+            'price_data': {
+                'currency': 'eur',
+                'product_data': {
+                    'name': f'{item.producto.marca} - {item.producto.modelo}',
+                },
+                'unit_amount': int(item.producto.precio * 100),  # en céntimos
+            },
+            'quantity': item.cantidad,
+        })
+
+    if not items:
+        return HttpResponseBadRequest("El carrito está vacío")
+
+    session = stripe.checkout.Session.create(
+        payment_method_types=['card'],
+        line_items=items,
+        mode='payment',
+        success_url=request.build_absolute_uri('/') + '?success=true',
+        cancel_url=request.build_absolute_uri('/carrito/') + '?cancelled=true',
+    )
+
+    return JsonResponse({'id': session.id})
+
+@login_required
+def procesar_pago(request):
+    carrito = request.user.carrito
+
+    if not carrito.items.exists():
+        messages.error(request, "Tu carrito está vacío.")
+        return redirect('ver_carrito')
+
+    # Simular que el pago fue exitoso
+    # Aquí es donde normalmente usarías Stripe
+
+    # Reducir unidades del stock
+    for item in carrito.items.all():
+        producto = item.producto
+        producto.unidades -= item.cantidad
+        producto.save()
+
+        # Registrar venta
+        producto.ventas += item.cantidad
+        producto.save()
+
+    # Vaciar el carrito
+    carrito.items.all().delete()
+
+    # Mensaje de confirmación
+    messages.success(request, "✅ Pago realizado con éxito.")
+
+    return redirect('lista_productos')
+
+@login_required
+def pago_exitoso(request):
+    carrito = request.user.carrito
+
+    for item in carrito.items.all():
+        producto = item.producto
+        cantidad = item.cantidad
+
+        # Actualiza stock y ventas
+        if producto.unidades >= cantidad:
+            producto.unidades -= cantidad
+            producto.ventas += cantidad
+            producto.save()
+
+    # Vacía el carrito
+    carrito.items.all().delete()
+
+    # Muestra mensaje
+    messages.success(request, "✅ ¡Pago realizado con éxito!")
+
+    return render(request, 'carrito/pago_exitoso.html')

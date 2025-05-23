@@ -64,54 +64,13 @@
                     </div>
                     <div class="card-body p-4">
                         <form method="POST">
-                            {% csrf_token %}
-
-                            <!-- Dirección de envío -->
-                            <h6 class="text-secondary mb-3">📦 Dirección de Envío</h6>
-                            <div class="mb-3">
-                                <label class="form-label">Nombre completo</label>
-                                {{ direccion_form.nombre_completo }}
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Dirección</label>
-                                {{ direccion_form.direccion }}
-                            </div>
-                            <div class="mb-3 row">
-                                <div class="col-md-6">
-                                    <label class="form-label">Ciudad</label>
-                                    {{ direccion_form.ciudad }}
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Código postal</label>
-                                    {{ direccion_form.codigo_postal }}
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">País</label>
-                                {{ direccion_form.pais }}
-                            </div>
-                            <hr>
-
                             <!-- Datos de pago -->
-                            <h6 class="text-secondary mb-3">💳 Información de Pago</h6>
-                            <div class="mb-3">
-                                <label class="form-label">Titular de la tarjeta</label>
-                                {{ tarjeta_form.titular }}
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Número de tarjeta</label>
-                                {{ tarjeta_form.numero }}
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Fecha de expiración</label>
-                                    {{ tarjeta_form.expiracion }}
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">CVV</label>
-                                    {{ tarjeta_form.cvv }}
-                                </div>
-                            </div>
+                             {% csrf_token %}
+                            <h4>Tarjeta de pago</h4>
+                            {{ tarjeta_form.as_p }}
+
+                            <h4>Dirección de envío</h4>
+                            {{ direccion_form.as_p }}
 
                             <!-- Botón de guardar -->
                             <div class="text-end mt-4">

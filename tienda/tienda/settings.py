@@ -105,7 +105,9 @@ import os
 LOGIN_REDIRECT_URL = 'lista_productos' # Página después del login 
 LOGOUT_REDIRECT_URL = 'lista_productos' # Página después del logout  
 
-     
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51RRXWpCdXtqJTGY6anR2xe3SE7MHGh2WmicU9CkRMrktj7uONwCkqyEvR7ORWjk2vkYhhDtQfgk2wfMr9WXUapFJ00bPUc020l'
+STRIPE_SECRET_KEY = 'sk_test_51RRXWpCdXtqJTGY6WQCuapaSSjQ7gSwwG7loFrV0d1zenSsyuOe2RLN8Ja64wfrmmycMpDHpT6YCAYn2hY0bCOSv00tanOCinX'
+    
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

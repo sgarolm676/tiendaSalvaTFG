@@ -57,6 +57,7 @@ class PerfilUpdateForm(forms.ModelForm):
 class DireccionEnvioForm(forms.ModelForm):
     class Meta:
         model = DireccionEnvio
+        exclude = ['usuario']
         fields = '__all__'
         widgets = {
             'nombre_completo': forms.TextInput(attrs={'class': 'form-control'}),
@@ -69,6 +70,7 @@ class DireccionEnvioForm(forms.ModelForm):
 class TarjetaPagoForm(forms.ModelForm):
     class Meta:
         model = TarjetaPago
+        exclude = ['usuario']
         fields = '__all__'
         widgets = {
             'titular': forms.TextInput(attrs={'class': 'form-control'}),

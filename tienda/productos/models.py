@@ -20,6 +20,8 @@ class Producto(models.Model):
     unidades = models.PositiveIntegerField(default=0)
     precio = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     color = models.CharField(max_length=20, choices=COLORES_CHOICES, default='Negro')
+    ventas = models.PositiveIntegerField(default=0)  # NUEVO campo
+
 
     def __str__(self):
         return f"{self.marca} - {self.modelo}"

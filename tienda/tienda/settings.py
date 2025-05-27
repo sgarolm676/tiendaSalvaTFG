@@ -134,3 +134,18 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+import os
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DJANGO_DB_NAME', 'tienda_db'),
+        'USER': os.environ.get('DJANGO_DB_USER', 'tienda_user'),
+        'PASSWORD': os.environ.get('DJANGO_DB_PASSWORD', 'tienda_pass'),
+        'HOST': os.environ.get('DJANGO_DB_HOST', 'localhost'),
+        'PORT': '5432',
+    }
+}
+

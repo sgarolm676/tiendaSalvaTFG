@@ -1,8 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Perfil, DireccionEnvio, TarjetaPago
-from productos.models import Producto
+from .models import Perfil, DireccionEnvio, TarjetaPago, Producto, ComentarioProducto
 
 class RegistroUsuarioForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -77,4 +76,12 @@ class TarjetaPagoForm(forms.ModelForm):
             'numero': forms.TextInput(attrs={'class': 'form-control'}),
             'expiracion': forms.TextInput(attrs={'class': 'form-control'}),
             'cvv': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+class ComentarioProductoForm(forms.ModelForm):
+    class Meta:
+        model = ComentarioProducto
+        fields = ['texto', 'estrellas']
+        widgets = {
+            'texto': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
+            'estrellas': forms.Select(choices=[(i, f"{i} estrellas") for i in range(1, 6)], attrs={'class': 'form-select'}),
         }

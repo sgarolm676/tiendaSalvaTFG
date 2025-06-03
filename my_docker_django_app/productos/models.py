@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
+
 
 
 class Producto(models.Model):
@@ -74,6 +76,38 @@ class ItemCarrito(models.Model):
     def get_total_item(self):
         return self.producto.precio * self.cantidad
 
+class ComentarioProducto(models.Model):
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE, related_name='comentarios')
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    texto = models.TextField()
+    estrellas = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)])  # de 1 a 5
+    fecha = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.usuario.username} - {self.estrellas}★"
     
+
+class Compra(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='compras')
+    fecha = models.DateTimeField(default=timezone.now)
+    total = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"Compra #{self.id} de {self.usuario.username} el {self.fecha.strftime('%Y-%m-%d')}"
+
+class ItemCompra(models.Model):
+    compra = models.ForeignKey(Compra, on_delete=models.CASCADE, related_name='items')
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    cantidad = models.PositiveIntegerField()
+    personalizado = models.BooleanField(default=False)
+
+    def get_total(self):
+        return self.producto.precio * self.cantidad
+
+    def __str__(self):
+        return f"{self.cantidad}x {self.producto} (Compra #{self.compra.id})"
+    
+
+
     
 

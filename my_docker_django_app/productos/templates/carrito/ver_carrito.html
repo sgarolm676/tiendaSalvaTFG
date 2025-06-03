@@ -102,24 +102,34 @@
     const stripe = Stripe("{{ STRIPE_PUBLISHABLE_KEY }}");
 
     document.getElementById("checkout-button").addEventListener("click", function () {
-        fetch("{% url 'crear_checkout_session' %}", {
-            method: "POST",
-            headers: {
-                'X-CSRFToken': '{{ csrf_token }}'
-            }
-        })
-        .then(response => response.json())
-        .then(session => {
-            return stripe.redirectToCheckout({ sessionId: session.id });
-        })
-        .then(result => {
-            if (result.error) {
-                alert(result.error.message);
-            }
-        })
-        .catch(error => {
-            console.error("Error:", error);
-        });
+    fetch("{% url 'crear_checkout_session' %}", {
+        method: "POST",
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => { throw new Error(err.error || 'Error al procesar el pago') });
+        }
+        return response.json();
+    })
+    .then(session => {
+        if (session.error) {
+            throw new Error(session.error);
+        }
+        return stripe.redirectToCheckout({ sessionId: session.id });
+    })
+    .then(result => {
+        if (result.error) {
+            alert(result.error.message);
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert(error.message);
     });
+});
 </script>
 </html>

@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Producto, Perfil, DireccionEnvio, TarjetaPago, Carrito, ItemCarrito
-from .forms import RegistroUsuarioForm, PersonalizacionForm, UserUpdateForm, PerfilUpdateForm, DireccionEnvioForm, TarjetaPagoForm
+from .models import Compra, ItemCompra,Producto, Perfil, DireccionEnvio, TarjetaPago, Carrito, ItemCarrito, ComentarioProducto
+from .forms import RegistroUsuarioForm, PersonalizacionForm, UserUpdateForm,ComentarioProductoForm, PerfilUpdateForm, DireccionEnvioForm, TarjetaPagoForm
 
 from django.contrib import messages
 from django.contrib.auth import logout
@@ -36,33 +36,45 @@ def cerrar_sesion(request):
     logout(request)
     return redirect('lista_productos')  # O la vista principal que desees
 
-@login_required
 def detalle_producto(request, id):
     producto = get_object_or_404(Producto, id=id)
 
-    # Obtener todos los colores disponibles para el mismo modelo, sin repetidos
+    # Colores disponibles para ese modelo
     colores_disponibles = Producto.objects.filter(modelo=producto.modelo).values_list('color', flat=True).distinct()
 
-    if request.method == 'POST':
-        form = PersonalizacionForm(request.POST, request.FILES)
-        if form.is_valid():
-            color = form.cleaned_data['color']
-            posicion = form.cleaned_data['posicion']
-            tipo = form.cleaned_data['tipo']
-            frase = form.cleaned_data['frase']
-            imagen = form.cleaned_data['imagen']
-            print(color, posicion, tipo, frase, imagen)
-            # Aquí puedes añadir más lógica según necesites
+    # Formularios
+    personalizacion_form = PersonalizacionForm()
+    comentario_form = ComentarioProductoForm()
+    comentarios = producto.comentarios.order_by('-fecha')  # Relación related_name='comentarios'
 
-    else:
-        form = PersonalizacionForm()
+    if request.method == 'POST':
+        if 'personalizacion_submit' in request.POST:
+            personalizacion_form = PersonalizacionForm(request.POST, request.FILES)
+            if personalizacion_form.is_valid():
+                color = personalizacion_form.cleaned_data['color']
+                posicion = personalizacion_form.cleaned_data['posicion']
+                tipo = personalizacion_form.cleaned_data['tipo']
+                frase = personalizacion_form.cleaned_data['frase']
+                imagen = personalizacion_form.cleaned_data['imagen']
+                print(color, posicion, tipo, frase, imagen)
+                # Aquí puedes guardar los datos si quieres
+
+        elif 'comentario_submit' in request.POST:
+            comentario_form = ComentarioProductoForm(request.POST)
+            if comentario_form.is_valid():
+                comentario = comentario_form.save(commit=False)
+                comentario.usuario = request.user
+                comentario.producto = producto
+                comentario.save()
+                return redirect('detalle_producto', id=producto.id)
 
     return render(request, 'productos/detalle_producto.html', {
         'producto': producto,
-        'form': form,
         'colores_disponibles': colores_disponibles,
+        'form': personalizacion_form,
+        'comentario_form': comentario_form,
+        'comentarios': comentarios
     })
-
 @login_required
 def editar_perfil(request):
     if request.method == 'POST':
@@ -168,6 +180,11 @@ def crear_checkout_session(request):
     carrito = request.user.carrito
     items = []
 
+    # Verificar stock antes de proceder al pago
+    for item in carrito.items.all():
+        if item.producto.unidades < item.cantidad:
+            return JsonResponse({'error': f'No hay suficiente stock para {item.producto.marca} - {item.producto.modelo}'}, status=400)
+
     for item in carrito.items.all():
         items.append({
             'price_data': {
@@ -175,7 +192,7 @@ def crear_checkout_session(request):
                 'product_data': {
                     'name': f'{item.producto.marca} - {item.producto.modelo}',
                 },
-                'unit_amount': int(item.producto.precio * 100),  # en céntimos
+                'unit_amount': int(item.producto.precio * 100),
             },
             'quantity': item.cantidad,
         })
@@ -183,15 +200,17 @@ def crear_checkout_session(request):
     if not items:
         return HttpResponseBadRequest("El carrito está vacío")
 
-    session = stripe.checkout.Session.create(
-        payment_method_types=['card'],
-        line_items=items,
-        mode='payment',
-        success_url=request.build_absolute_uri('/') + '?success=true',
-        cancel_url=request.build_absolute_uri('/carrito/') + '?cancelled=true',
-    )
-
-    return JsonResponse({'id': session.id})
+    try:
+        session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=items,
+            mode='payment',
+            success_url=request.build_absolute_uri('/pago-exitoso/'),
+            cancel_url=request.build_absolute_uri('/carrito/'),
+        )
+        return JsonResponse({'id': session.id})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
 
 @login_required
 def procesar_pago(request):
@@ -222,24 +241,48 @@ def procesar_pago(request):
 
     return redirect('lista_productos')
 
+
 @login_required
 def pago_exitoso(request):
     carrito = request.user.carrito
 
+    if not carrito.items.exists():
+        messages.error(request, "El carrito está vacío.")
+        return redirect('ver_carrito')
+
+    total = carrito.get_total_carrito()
+
+    # Crear la compra
+    compra = Compra.objects.create(usuario=request.user, total=total)
+
     for item in carrito.items.all():
         producto = item.producto
-        cantidad = item.cantidad
 
-        # Actualiza stock y ventas
-        if producto.unidades >= cantidad:
-            producto.unidades -= cantidad
-            producto.ventas += cantidad
-            producto.save()
+        # Crear item de compra
+        ItemCompra.objects.create(
+            compra=compra,
+            producto=producto,
+            cantidad=item.cantidad,
+            personalizado=item.personalizado
+        )
 
-    # Vacía el carrito
+        # Actualizar producto
+        producto.unidades -= item.cantidad
+        producto.ventas += item.cantidad
+        producto.save()
+
+    # Vaciar carrito
     carrito.items.all().delete()
 
-    # Muestra mensaje
-    messages.success(request, "✅ ¡Pago realizado con éxito!")
-
+    messages.success(request, "¡Pago realizado con éxito! Tu pedido está en camino.")
     return render(request, 'carrito/pago_exitoso.html')
+
+@login_required
+def compras_anteriores(request):
+    compras = Compra.objects.filter(usuario=request.user).order_by('-fecha')
+    return render(request, 'perfil/compras_anteriores.html', {'compras': compras})
+
+def salir(request):
+    logout(request)
+    return redirect('lista_productos')
+

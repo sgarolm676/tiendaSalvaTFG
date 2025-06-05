@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Compra, ItemCompra,Producto, Perfil, DireccionEnvio, TarjetaPago, Carrito, ItemCarrito, ComentarioProducto
+from .models import Producto, Compra, ItemCompra,Producto, Perfil, DireccionEnvio, TarjetaPago, Carrito, ItemCarrito, ComentarioProducto
 from .forms import RegistroUsuarioForm, PersonalizacionForm, UserUpdateForm,ComentarioProductoForm, PerfilUpdateForm, DireccionEnvioForm, TarjetaPagoForm
 
 from django.contrib import messages
@@ -9,6 +9,8 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_POST
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.db import models
+from django.db.models import Q
 import stripe
 from django.conf import settings
 from django.shortcuts import render, redirect
@@ -16,8 +18,15 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpResponseBadRequest
 
 def lista_productos(request):
-    productos = Producto.objects.all().order_by('-ventas')  # Más vendidos primero
-    return render(request, 'productos/lista_productos.html', {'productos': productos})
+    query = request.GET.get('q', '')
+    productos = Producto.objects.all().order_by('-ventas')
+
+    if query:
+        productos = productos.filter(
+            Q(marca__icontains=query) | Q(modelo__icontains=query)
+        )
+
+    return render(request, 'productos/lista_productos.html', {'productos': productos, 'query': query})
 
 def registrar_usuario(request):
     if request.method == 'POST':

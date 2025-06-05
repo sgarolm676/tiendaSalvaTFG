@@ -2,79 +2,216 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Catálogo - TechCore</title>
+  <title>Colección Exclusiva | TechCore</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    /* Paleta de colores premium */
     :root {
-      --primary-color: #4361ee;
-      --secondary-color: #3f37c9;
-      --accent-color: #4895ef;
-      --dark-color: #212529;
-      --light-color: #f8f9fa;
-      --success-color: #4cc9f0;
-      --warning-color: #f8961e;
-      --danger-color: #f72585;
+      --primary-color: #1a1a2e;
+      --secondary-color: #16213e;
+      --accent-color: #0f3460;
+      --gold-color: #e6b31e;
+      --light-color: #f9f9f9;
+      --dark-color: #121212;
+      --text-color: #333333;
+      --light-gray: #e8e8e8;
     }
 
     body {
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Montserrat', sans-serif;
       background-color: var(--light-color);
-      color: var(--dark-color);
+      color: var(--text-color);
+      line-height: 1.6;
     }
 
+    /* Header de lujo */
     .navbar-brand {
+      font-family: 'Playfair Display', serif;
       font-weight: 700;
+      font-size: 2rem;
       color: var(--primary-color) !important;
+      letter-spacing: 1px;
     }
 
-    .user-actions img {
-      border: 2px solid white;
-      transition: transform 0.3s ease;
+    .navbar-brand span {
+      color: var(--gold-color);
     }
 
-    .user-actions img:hover {
-      transform: scale(1.05);
+    /* Barra de búsqueda premium */
+    .search-bar {
+      width: 100%;
+      max-width: 400px;
+      position: relative;
     }
 
+    .search-bar input {
+      border-radius: 30px;
+      padding: 12px 20px;
+      border: 1px solid var(--light-gray);
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+    }
+
+    .search-bar input:focus {
+      border-color: var(--gold-color);
+      box-shadow: 0 2px 15px rgba(230, 179, 30, 0.2);
+    }
+
+    .search-bar button {
+      border-radius: 30px;
+      padding: 10px 20px;
+      background-color: var(--primary-color);
+      border: none;
+      position: absolute;
+      right: 5px;
+      top: 5px;
+      transition: all 0.3s ease;
+    }
+
+    .search-bar button:hover {
+      background-color: var(--accent-color);
+    }
+
+    /* Iconos de usuario */
+    .user-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .user-icon {
+      font-size: 1.2rem;
+      color: var(--primary-color);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .user-icon:hover {
+      color: var(--gold-color);
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background-color: var(--gold-color);
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: bold;
+    }
+
+    /* Tarjetas de producto premium */
     .product-card {
       border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
       overflow: hidden;
       border: none;
+      margin-bottom: 30px;
+      background: white;
+      position: relative;
     }
 
     .product-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+      transform: translateY(-10px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-image-container {
+      overflow: hidden;
+      position: relative;
     }
 
     .product-image {
       width: 100%;
-      height: 220px;
+      height: 280px;
       object-fit: cover;
-      transition: transform 0.5s ease;
+      transition: transform 0.7s ease;
     }
 
     .product-card:hover .product-image {
-      transform: scale(1.03);
+      transform: scale(1.05);
+    }
+
+    .product-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background-color: var(--gold-color);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      z-index: 2;
     }
 
     .card-body {
-      padding: 1.5rem;
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      height: calc(100% - 280px);
     }
 
     .card-title {
+      font-family: 'Playfair Display', serif;
       font-weight: 600;
-      color: var(--dark-color);
+      color: var(--primary-color);
+      font-size: 1.3rem;
+      margin-bottom: 5px;
+    }
+
+    .card-subtitle {
+      color: #777;
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+    }
+
+    .card-price {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin: 10px 0;
+    }
+
+    .card-price span {
+      color: var(--gold-color);
+    }
+
+  .product-ranking-image {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid #f0f0f0;
+}
+
+    .product-actions {
+      margin-top: auto;
+      display: flex;
+      gap: 10px;
     }
 
     .btn-outline-primary {
       border-color: var(--primary-color);
       color: var(--primary-color);
+      border-radius: 30px;
+      padding: 8px 20px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      flex-grow: 1;
     }
 
     .btn-outline-primary:hover {
@@ -82,128 +219,199 @@
       color: white;
     }
 
-    .btn-primary {
-      background-color: var(--primary-color);
-      border-color: var(--primary-color);
-    }
-
-    .btn-primary:hover {
-      background-color: var(--secondary-color);
-      border-color: var(--secondary-color);
-    }
-
-    .dropdown-menu {
-      border-radius: 8px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    .btn-wishlist {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--light-gray);
+      color: var(--text-color);
       border: none;
+      transition: all 0.3s ease;
     }
 
-    .dropdown-item:hover {
-      background-color: rgba(67, 97, 238, 0.1);
-      color: var(--primary-color);
-    }
-
-    .table {
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    }
-
-    .table thead th {
-      background-color: var(--primary-color);
+    .btn-wishlist:hover {
+      background-color: var(--gold-color);
       color: white;
-      font-weight: 500;
     }
 
-    .table tbody tr:hover {
-      background-color: rgba(67, 97, 238, 0.05);
-    }
-
-    .ranking-header {
+    /* Sección de colecciones */
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 30px;
       position: relative;
-      margin-bottom: 1.5rem;
-      padding-bottom: 0.5rem;
+      display: inline-block;
     }
 
-    .ranking-header:after {
+    .section-title:after {
       content: '';
       position: absolute;
-      bottom: 0;
+      bottom: -10px;
       left: 0;
-      width: 50px;
+      width: 60px;
       height: 3px;
-      background-color: var(--warning-color);
+      background-color: var(--gold-color);
     }
 
+   /* Footer premium */
+    .premium-footer {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 50px 0;
+      margin-top: 80px;
+    }
+
+    .footer-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+
+    .footer-title span {
+      color: var(--gold-color);
+    }
+
+    .footer-links a {
+      color: #ccc;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--gold-color);
+      padding-left: 5px;
+    }
+
+    .social-icons a {
+      color: white;
+      font-size: 1.2rem;
+      margin-right: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .social-icons a:hover {
+      color: var(--gold-color);
+      transform: translateY(-3px);
+    }
+
+    /* Efectos hover sofisticados */
+    .hover-gold:hover {
+      color: var(--gold-color) !important;
+    }
+
+    /* Responsive design */
     @media (max-width: 768px) {
+      .navbar-brand {
+        font-size: 1.5rem;
+      }
+      
       .product-image {
-        height: 180px;
+        height: 200px;
       }
-
+      
       .user-actions {
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 0.75rem;
-      }
-
-      header h3 {
-        font-size: 1.2rem;
+        gap: 15px;
       }
     }
   </style>
 </head>
 <body>
   <div class="container py-4">
-    <!-- Header -->
-    <header class="d-flex flex-wrap justify-content-between align-items-center mb-4">
-      <h1 class="navbar-brand mb-0">TechCore</h1>
+    <!-- Header Premium -->
+    <header class="d-flex flex-wrap justify-content-between align-items-center mb-5">
+      <h1 class="navbar-brand mb-0">Tech<span>Core</span></h1>
 
-      <div class="d-flex align-items-center gap-3 user-actions">
+      <!-- Barra de búsqueda elegante -->
+      <form action="{% url 'lista_productos' %}" method="GET" class="d-flex search-bar">
+        <input type="text" name="q" class="form-control" placeholder="Buscar productos exclusivos..." value="{{ request.GET.q }}">
+        <button type="submit" class="btn"><i class="fas fa-search"></i></button>
+      </form>
+
+      <div class="d-flex align-items-center user-actions">
         {% if user.is_authenticated %}
-          <a href="{% url 'ver_carrito' %}" class="text-decoration-none text-dark fs-5 position-relative">
+          <a href="{% url 'ver_carrito' %}" class="user-icon position-relative">
             <i class="fas fa-shopping-bag"></i>
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-              {{ user.carrito.items.count }}
-              <span class="visually-hidden">items en carrito</span>
-            </span>
+            <span class="cart-count">{{ user.carrito.items.count }}</span>
           </a>
-          <div class="dropdown">
+          
+          <div class="dropdown ms-3">
             <a href="#" class="dropdown-toggle d-flex align-items-center text-decoration-none" data-bs-toggle="dropdown">
-              <img src="{% if user.perfil.imagen and user.perfil.imagen.url != '/media/avatars/default.jpeg' %}{{ user.perfil.imagen.url }}{% else %}https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/icons/person-circle.svg{% endif %}" width="40" height="40" class="rounded-circle me-2">
-              <strong class="text-dark">Hola, {{ user.username }}</strong>
+              <img src="{% if user.perfil.imagen and user.perfil.imagen.url != '/media/avatars/default.jpeg' %}{{ user.perfil.imagen.url }}{% else %}https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/icons/person-circle.svg{% endif %}" width="40" height="40" class="rounded-circle me-2 border border-2 border-gold">
+              <strong class="text-dark hover-gold">Mi Cuenta</strong>
             </a>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href="{% url 'editar_perfil' %}"><i class="fas fa-user me-2"></i>Perfil</a></li>
+            <ul class="dropdown-menu dropdown-menu-end shadow">
+              <li><a class="dropdown-item hover-gold" href="{% url 'editar_perfil' %}"><i class="fas fa-user me-2"></i>Perfil</a></li>
+              
               <li><hr class="dropdown-divider"></li>
               <li>
                 <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">{% csrf_token %}</form>
-                <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                <a class="dropdown-item hover-gold" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                   <i class="fas fa-sign-out-alt me-2"></i>Cerrar sesión
                 </a>
               </li>
             </ul>
           </div>
         {% else %}
-          <a href="{% url 'login' %}" class="text-dark fs-5" title="Iniciar sesión">
+          <a href="{% url 'login' %}" class="user-icon">
             <i class="fas fa-shopping-bag"></i>
           </a>
-          <a href="{% url 'login' %}" class="btn btn-outline-primary">Iniciar sesión</a>
-          <a href="{% url 'register' %}" class="btn btn-primary">Registrarse</a>
+          <a href="{% url 'login' %}" class="btn btn-outline-dark ms-3">Iniciar sesión</a>
+          <a href="{% url 'register' %}" class="btn btn-dark ms-2">Registrarse</a>
         {% endif %}
       </div>
     </header>
 
-    <!-- Productos -->
+    <!-- Banner de colección -->
+    <div class="row mb-5">
+      <div class="col-12">
+        <div class="p-5 rounded" style="background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80') center/cover;">
+          <h2 class="text-white display-4 fw-bold mb-3">Colección 2025</h2>
+          <p class="text-white-50 lead mb-4">Tecnología de vanguardia para todos los clientes</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Productos Destacados -->
+    <h2 class="section-title">Nuestras Productos</h2>
     <div class="row">
       {% for producto in productos %}
         <div class="col-md-4">
           <div class="card product-card h-100">
-            <img src="{{ producto.imagen.url }}" class="product-image" alt="{{ producto.marca }} {{ producto.modelo }}">
-            <div class="card-body text-center d-flex flex-column">
+            {% if producto.oferta %}
+              <div class="product-badge">EXCLUSIVO</div>
+            {% endif %}
+            <div class="product-image-container">
+              <img src="{{ producto.imagen.url }}" class="product-image" alt="{{ producto.marca }} {{ producto.modelo }}">
+            </div>
+            <div class="card-body">
               <h5 class="card-title">{{ producto.marca }}</h5>
-              <p class="text-muted">{{ producto.modelo }}</p>
-              <div class="mt-auto">
-                <a href="{% url 'detalle_producto' producto.id %}" class="btn btn-outline-primary w-100">Ver detalles</a>
+              <p class="card-subtitle">{{ producto.modelo }}</p>
+              
+              <div class="d-flex align-items-center mb-2">
+                {% for i in "12345" %}
+                  {% if i|add:0 <= producto.valoracion_promedio %}
+                    <i class="fas fa-star text-warning me-1"></i>
+                  {% else %}
+                    <i class="far fa-star text-warning me-1"></i>
+                  {% endif %}
+                {% endfor %}
+                <small class="text-muted ms-2">({{ producto.num_valoraciones }})</small>
+              </div>
+              
+              <p class="card-price">€{{ producto.precio }} <span class="text-decoration-line-through text-muted small ms-2">€{{ producto.precio_original }}</span></p>
+              
+              <div class="product-actions">
+                <a href="{% url 'detalle_producto' producto.id %}" class="btn btn-outline-primary">Ver detalles</a>
+                <button class="btn-wishlist">
+                  <i class="far fa-heart"></i>
+                </button>
               </div>
             </div>
           </div>
@@ -211,51 +419,136 @@
       {% endfor %}
     </div>
 
-    <!-- Ranking -->
-    <div class="mt-5 pt-4">
-      <h2 class="ranking-header"><i class="fas fa-trophy me-2" style="color: var(--warning-color);"></i> Ranking de Productos Más Vendidos</h2>
-      <div class="table-responsive">
-        <table class="table table-hover align-middle">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Producto</th>
-              <th class="text-center">Ventas</th>
-              <th class="text-center">Precio</th>
-              <th class="text-center">Disponibles</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for producto in productos %}
-            <tr>
-              <td class="fw-bold">{{ forloop.counter }}</td>
-              <td>
-                <div class="d-flex align-items-center">
-                  <img src="{{ producto.imagen.url }}" width="40" height="40" class="rounded me-3" alt="{{ producto.marca }} {{ producto.modelo }}">
-                  <span>{{ producto.marca }} {{ producto.modelo }}</span>
-                </div>
-              </td>
-              <td class="text-center">
-                <span class="badge bg-primary rounded-pill">{{ producto.ventas }}</span>
-              </td>
-              <td class="text-center fw-bold">€{{ producto.precio }}</td>
-              <td class="text-center">
-                {% if producto.unidades > 10 %}
-                  <span class="badge bg-success">Disponible</span>
-                {% elif producto.unidades > 0 %}
-                  <span class="badge bg-warning text-dark">Últimas unidades</span>
-                {% else %}
-                  <span class="badge bg-danger">Agotado</span>
-                {% endif %}
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+    <!-- Llamada a la acción -->
+    <!-- Llamada a la acción -->
+  <div class="container py-5">
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-0 py-3">
+            <h2 class="h4 mb-1"><i class="fas fa-trophy text-warning me-2"></i> Ranking de Productos Exclusivos</h2>
+            <p class="text-muted mb-0">Descubre lo más solicitado por nuestros clientes de élite.</p>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col" style="width: 50px;">#</th>
+                            <th scope="col">Producto</th>
+                            <th scope="col" class="text-center" style="width: 120px;">Ventas</th>
+                            <th scope="col" class="text-center" style="width: 120px;">Precio</th>
+                            <th scope="col" class="text-center" style="width: 150px;">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for producto in productos %}
+                        <tr>
+                            <td class="fw-bold text-muted">{{ forloop.counter }}</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img src="{{ producto.imagen.url }}" class="product-ranking-image me-3" alt="{{ producto.marca }} {{ producto.modelo }}">
+                                    <div>
+                                        <div class="fw-medium">{{ producto.marca }} <span class="fw-normal">{{ producto.modelo }}</span></div>
+                                        <small class="text-muted">{{ producto.categoria|default_if_none:"Electrónica" }}</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <span class="badge bg-light text-dark">{{ producto.ventas }} <i class="fas fa-chart-line text-success ms-1"></i></span>
+                            </td>
+                            <td class="text-center fw-bold">€{{ producto.precio }}</td>
+                            <td class="text-center">
+                                {% if producto.unidades > 10 %}
+                                    <span class="badge bg-success bg-opacity-10 text-success">En Stock</span>
+                                {% elif producto.unidades > 0 %}
+                                    <span class="badge bg-warning bg-opacity-10 text-warning">Últimas Unidades</span>
+                                {% else %}
+                                    <span class="badge bg-danger bg-opacity-10 text-danger">Agotado</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
   </div>
 
+
+
+  <!-- Footer Premium -->
+<footer class="premium-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 mb-4 mb-md-0">
+          <h3 class="footer-title">Tech<span>Core</span></h3>
+          <p>Tecnología de excelencia para una vida extraordinaria.</p>
+          <div class="social-icons mt-4">
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-pinterest-p"></i></a>
+          </div>
+        </div>
+        <div class="col-md-2 mb-4 mb-md-0">
+          <h4 class="footer-title">Comprar</h4>
+          <div class="footer-links">
+            <a href="#">Productos</a>
+            <a href="#">Colecciones</a>
+            <a href="#">Ofertas</a>
+            <a href="#">Nuevos lanzamientos</a>
+          </div>
+        </div>
+        <div class="col-md-2 mb-4 mb-md-0">
+          <h4 class="footer-title">Servicios</h4>
+          <div class="footer-links">
+            <a href="#">Asesoramiento</a>
+            <a href="#">Configuración personalizada</a>
+            <a href="#">Entrega premium</a>
+            <a href="#">Soporte exclusivo</a>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <h4 class="footer-title">Contacto</h4>
+          <p><i class="fas fa-map-marker-alt me-2"></i> Av. de la Tecnología 123, Madrid</p>
+          <p><i class="fas fa-phone me-2"></i> +34 910 123 456</p>
+          <p><i class="fas fa-envelope me-2"></i> exclusivo@techcore.com</p>
+        </div>
+      </div>
+      <hr class="mt-5 mb-4" style="border-color: rgba(255,255,255,0.1);">
+      <div class="row">
+        <div class="col-md-6 text-center text-md-start">
+          <p class="small mb-0">© 2023 TechCore. Todos los derechos reservados.</p>
+        </div>
+        <div class="col-md-6 text-center text-md-end">
+          <a href="#" class="small text-white-50 me-3">Términos y condiciones</a>
+          <a href="#" class="small text-white-50">Política de privacidad</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Efectos interactivos
+    document.querySelectorAll('.btn-wishlist').forEach(button => {
+      button.addEventListener('click', function() {
+        const icon = this.querySelector('i');
+        if (icon.classList.contains('far')) {
+          icon.classList.remove('far');
+          icon.classList.add('fas');
+          this.style.backgroundColor = 'var(--gold-color)';
+          this.style.color = 'white';
+        } else {
+          icon.classList.remove('fas');
+          icon.classList.add('far');
+          this.style.backgroundColor = 'var(--light-gray)';
+          this.style.color = 'var(--text-color)';
+        }
+      });
+    });
+  </script>
 </body>
 </html>

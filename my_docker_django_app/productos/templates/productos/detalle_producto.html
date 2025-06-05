@@ -2,115 +2,164 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>{{ producto.marca }} - {{ producto.modelo }}</title>
+  <title>{{ producto.marca }} - {{ producto.modelo }} | TechCore</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Descubre el exclusivo {{ producto.modelo }} de {{ producto.marca }} en TechCore. Tecnología de lujo con personalización premium.">
 
-  <!-- Bootstrap + FontAwesome + Google Fonts -->
+  <!-- Fuentes y estilos premium -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
     :root {
-      --primary: #2563eb;
-      --primary-dark: #1d4ed8;
-      --dark: #1e293b;
-      --light: #f8fafc;
-      --gray: #94a3b8;
-      --success: #10b981;
-      --danger: #ef4444;
-      --border-radius: 12px;
-      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --primary: #1a1a2e;
+      --primary-dark: #16213e;
+      --gold: #d4af37;
+      --dark: #0f0f1a;
+      --light: #f8f8ff;
+      --gray: #e2e2e2;
+      --success: #4caf50;
+      --danger: #e53935;
+      --border-radius: 16px;
+      --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.15);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
 
     body {
-      font-family: 'Inter', sans-serif;
-      background-color: #f1f5f9;
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--light);
       color: var(--dark);
-      line-height: 1.6;
+      line-height: 1.7;
     }
 
-    .tech-header {
-      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+    .luxury-header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
       color: white;
       border-radius: var(--border-radius);
-      padding: 1rem;
-      margin-bottom: 2rem;
+      padding: 1.5rem;
+      margin-bottom: 2.5rem;
       box-shadow: var(--shadow);
+      border-bottom: 3px solid var(--gold);
     }
 
-    .tech-card {
+    .luxury-card {
       border: none;
       border-radius: var(--border-radius);
       box-shadow: var(--shadow);
-      transition: transform 0.2s ease;
+      transition: var(--transition);
       background-color: white;
+      overflow: hidden;
+      border-top: 4px solid var(--gold);
     }
 
-    .tech-card:hover {
-      transform: translateY(-5px);
+    .luxury-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.2);
+    }
+
+    .product-image-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--border-radius);
+      background: linear-gradient(145deg, #ffffff 0%, #f5f5f5 100%);
+      padding: 2rem;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .product-image {
-      border-radius: var(--border-radius);
+      max-height: 450px;
       object-fit: contain;
-      background-color: #f8fafc;
-      padding: 1rem;
-      max-height: 400px;
+      transition: var(--transition);
+    }
+
+    .product-image:hover {
+      transform: scale(1.03);
     }
 
     .product-title {
-      font-weight: 700;
-      color: var(--dark);
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+      color: var(--primary);
       margin-bottom: 0.5rem;
+      font-size: 2.2rem;
+      letter-spacing: 0.5px;
     }
 
     .product-subtitle {
-      color: var(--gray);
+      color: var(--gold);
       font-weight: 500;
       margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     .price-tag {
-      font-size: 1.75rem;
+      font-size: 2rem;
       font-weight: 700;
       color: var(--primary);
-      font-family: 'Roboto Mono', monospace;
+      font-family: 'Montserrat', sans-serif;
+      position: relative;
+      display: inline-block;
+    }
+
+    .price-tag::after {
+      content: "";
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 50px;
+      height: 2px;
+      background-color: var(--gold);
     }
 
     .stock-badge {
       font-size: 0.85rem;
-      padding: 0.35rem 0.75rem;
+      padding: 0.5rem 1rem;
       border-radius: 20px;
-    }
-
-    .btn-tech {
-      border-radius: 8px;
-      font-weight: 600;
-      padding: 0.75rem 1.5rem;
-      transition: all 0.2s ease;
+      background-color: var(--primary);
+      color: white;
+      font-weight: 500;
       letter-spacing: 0.5px;
     }
 
-    .btn-primary-tech {
+    .btn-luxury {
+      border-radius: 8px;
+      font-weight: 600;
+      padding: 0.9rem 2rem;
+      transition: var(--transition);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+    }
+
+    .btn-primary-luxury {
       background-color: var(--primary);
-      border-color: var(--primary);
+      border: 2px solid var(--primary);
+      color: white;
     }
 
-    .btn-primary-tech:hover {
-      background-color: var(--primary-dark);
-      transform: translateY(-2px);
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    .btn-primary-luxury:hover {
+      background-color: transparent;
+      color: var(--primary);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.15);
     }
 
-    .btn-outline-tech {
+    .btn-outline-luxury {
       border: 2px solid var(--primary);
       color: var(--primary);
+      background-color: transparent;
     }
 
-    .btn-outline-tech:hover {
+    .btn-outline-luxury:hover {
       background-color: var(--primary);
       color: white;
+      transform: translateY(-3px);
     }
 
     .specs-list {
@@ -119,10 +168,11 @@
     }
 
     .specs-list li {
-      padding: 0.5rem 0;
-      border-bottom: 1px solid #e2e8f0;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
       display: flex;
       justify-content: space-between;
+      align-items: center;
     }
 
     .specs-list li:last-child {
@@ -131,25 +181,32 @@
 
     .spec-label {
       font-weight: 500;
-      color: var(--gray);
+      color: var(--primary);
+      opacity: 0.7;
     }
 
     .spec-value {
       font-weight: 600;
+      color: var(--primary);
     }
 
     .comment-card {
-      border-left: 3px solid var(--primary);
-      transition: all 0.2s ease;
+      border-left: 4px solid var(--gold);
+      transition: var(--transition);
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.05);
     }
 
     .comment-card:hover {
-      transform: translateX(5px);
+      transform: translateX(8px);
+      box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
     }
 
     .star-rating {
-      color: #f59e0b;
+      color: var(--gold);
       font-size: 1.1rem;
+      letter-spacing: 2px;
     }
 
     .customization-section {
@@ -157,57 +214,124 @@
       border-radius: var(--border-radius);
       box-shadow: var(--shadow);
       overflow: hidden;
+      border-top: 4px solid var(--gold);
     }
 
     .customization-header {
-      background-color: var(--dark);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
       color: white;
-      padding: 1rem;
+      padding: 1.5rem;
       cursor: pointer;
+      transition: var(--transition);
     }
 
-    .form-control-tech {
+    .customization-header:hover {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+    }
+
+    .form-control-luxury {
       border-radius: 8px;
-      padding: 0.75rem 1rem;
-      border: 1px solid #cbd5e1;
+      padding: 1rem 1.2rem;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      transition: var(--transition);
+      font-size: 0.95rem;
     }
 
-    .form-control-tech:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.25);
+    .form-control-luxury:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 0.25rem rgba(212, 175, 55, 0.25);
     }
 
     .user-avatar {
-      width: 40px;
-      height: 40px;
+      width: 45px;
+      height: 45px;
       object-fit: cover;
       border-radius: 50%;
-      border: 2px solid var(--primary);
+      border: 2px solid var(--gold);
+      transition: var(--transition);
     }
 
-    .dropdown-menu-tech {
+    .user-avatar:hover {
+      transform: scale(1.1);
+    }
+
+    .dropdown-menu-luxury {
       border-radius: 8px;
       border: none;
       box-shadow: var(--shadow);
+      border-top: 2px solid var(--gold);
+    }
+
+    .dropdown-item {
+      transition: var(--transition);
+      padding: 0.75rem 1.5rem;
+    }
+
+    .dropdown-item:hover {
+      background-color: rgba(212, 175, 55, 0.1);
+    }
+
+    .nav-divider {
+      border-top: 1px solid rgba(212, 175, 55, 0.3);
+      margin: 0.5rem 0;
+    }
+
+    .logo-text {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: var(--primary);
+      letter-spacing: 1px;
+    }
+
+    .logo-text span {
+      color: var(--gold);
+    }
+
+    .discount-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background-color: var(--danger);
+      color: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .related-product-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--primary);
     }
 
     @media (max-width: 768px) {
       .product-image {
         max-height: 300px;
       }
+      
+      .product-title {
+        font-size: 1.8rem;
+      }
     }
   </style>
 </head>
 
 <body>
-  <!-- Encabezado -->
+  <!-- Encabezado de lujo -->
   <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <a href="{% url 'lista_productos' %}" class="btn btn-outline-tech d-flex align-items-center">
-        <i class="fas fa-arrow-left me-2"></i> Volver
+      <a href="{% url 'lista_productos' %}" class="btn btn-outline-luxury d-flex align-items-center">
+        <i class="fas fa-chevron-left me-2"></i> Volver
       </a>
 
-      <h3 class="fw-bold m-0 text-center flex-grow-1" style="color: var(--primary);">TechCore</h3>
+      <div class="logo-text">Tech<span>Core</span></div>
 
       <div class="d-flex align-items-center">
         <a href="{% url 'ver_carrito' %}" class="position-relative me-3">
@@ -221,10 +345,10 @@
             <img src="{% if user.perfil.imagen and user.perfil.imagen.url != '/media/avatars/default.jpeg' %}{{ user.perfil.imagen.url }}{% else %}https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/icons/person-circle.svg{% endif %}" 
                  class="user-avatar me-2">
           </a>
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-tech">
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-luxury">
             <li><a class="dropdown-item" href="{% url 'editar_perfil' %}"><i class="fas fa-user-cog me-2"></i>Perfil</a></li>
             <li><a class="dropdown-item" href="{% url 'configuracion' %}"><i class="fas fa-cog me-2"></i>Configuración</a></li>
-            <li><hr class="dropdown-divider"></li>
+            <li><div class="nav-divider"></div></li>
             <li>
               <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">{% csrf_token %}</form>
               <a class="dropdown-item text-danger" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -237,37 +361,41 @@
     </div>
   </div>
 
-  <!-- Producto -->
+  <!-- Presentación del producto de lujo -->
   <div class="container">
-    <div class="tech-card mb-4 p-4">
-      <div class="row g-4 align-items-center">
+    <div class="luxury-card mb-5 p-0">
+      <div class="row g-0 align-items-stretch">
         <!-- Imagen del producto -->
-        <div class="col-md-6 text-center">
-          <img src="{{ producto.imagen.url }}" alt="{{ producto.marca }}" class="product-image img-fluid w-100">
+        <div class="col-md-6">
+          <div class="product-image-container">
+            {% if producto.descuento %}
+              <div class="discount-badge">-{{ producto.descuento }}%</div>
+            {% endif %}
+            <img src="{{ producto.imagen.url }}" alt="{{ producto.marca }}" class="product-image img-fluid">
+          </div>
         </div>
         
         <!-- Detalles del producto -->
-        <div class="col-md-6">
-          <div class="d-flex justify-content-between align-items-start mb-3">
+        <div class="col-md-6 p-5">
+          <div class="d-flex justify-content-between align-items-start mb-4">
             <div>
               <h1 class="product-title">{{ producto.marca }}</h1>
               <h2 class="product-subtitle">{{ producto.modelo }}</h2>
             </div>
-            <span class="stock-badge bg-{% if producto.unidades > 5 %}success{% else %}warning{% endif %} text-white">
+            <span class="stock-badge">
               <i class="fas fa-{% if producto.unidades > 5 %}check-circle{% else %}exclamation-triangle{% endif %} me-1"></i>
               {{ producto.unidades }} disponibles
             </span>
           </div>
 
-          <div class="mb-4">
+          <div class="mb-5">
             <span class="price-tag">{{ producto.precio }} €</span>
             {% if producto.precio_original %}
-              <span class="text-decoration-line-through text-muted ms-2">{{ producto.precio_original }} €</span>
-              <span class="badge bg-danger ms-2">-{{ producto.descuento }}%</span>
+              <span class="text-decoration-line-through text-muted ms-3">{{ producto.precio_original }} €</span>
             {% endif %}
           </div>
 
-          <ul class="specs-list mb-4">
+          <ul class="specs-list mb-5">
             <li>
               <span class="spec-label">Color:</span>
               <span class="spec-value">{{ producto.color }}</span>
@@ -282,34 +410,34 @@
             </li>
             <li>
               <span class="spec-label">Envío:</span>
-              <span class="spec-value">24-48h <i class="fas fa-truck text-muted ms-1"></i></span>
+              <span class="spec-value">Entrega Premium 24h <i class="fas fa-truck text-muted ms-2"></i></span>
             </li>
           </ul>
 
           <form method="post" action="{% url 'agregar_al_carrito' producto.id %}" class="mt-4">
             {% csrf_token %}
             <input type="hidden" name="personalizado" value="False">
-            <button type="submit" class="btn btn-primary-tech w-100 btn-tech">
-              <i class="fas fa-cart-plus me-2"></i> Añadir al carrito
+            <button type="submit" class="btn btn-primary-luxury w-100 btn-luxury">
+              <i class="fas fa-shopping-bag me-2"></i> Añadir a la cesta
             </button>
           </form>
         </div>
       </div>
     </div>
 
-    <!-- Personalización -->
-    <div class="customization-section mb-4">
+    <!-- Sección de personalización exclusiva -->
+    <div class="customization-section mb-5">
       <div class="customization-header d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#infoProducto">
-        <h5 class="m-0"><i class="fas fa-sliders-h me-2"></i> Personalización del producto</h5>
-        <i class="fas fa-chevron-down"></i>
+        <h5 class="m-0"><i class="fas fa-crown me-2"></i> Personalización Exclusiva</h5>
+        <i class="fas fa-chevron-down transition-rotate"></i>
       </div>
-      <div class="collapse" id="infoProducto">
-        <form method="post" enctype="multipart/form-data" class="p-4">
+      <div class="collapse show" id="infoProducto">
+        <form method="post" enctype="multipart/form-data" class="p-5">
           {% csrf_token %}
 
           <div class="mb-4">
-            <label for="posicion" class="form-label fw-bold mb-3">¿Dónde quieres personalizarlo?</label>
-            <select id="posicion" name="posicion" class="form-select form-control-tech">
+            <label for="posicion" class="form-label fw-bold mb-3">Ubicación de la personalización</label>
+            <select id="posicion" name="posicion" class="form-select form-control-luxury">
               <option value="trasera">Parte trasera</option>
               <option value="lateral">Lateral izquierdo</option>
               <option value="frontal">Parte frontal</option>
@@ -318,44 +446,44 @@
 
           <div class="mb-4">
             <label for="tipo" class="form-label fw-bold mb-3">Tipo de personalización</label>
-            <select id="tipo" name="tipo" class="form-select form-control-tech">
-              <option value="frase">Texto personalizado</option>
-              <option value="imagen">Imagen/logo</option>
-              <option value="ambos">Texto e imagen</option>
+            <select id="tipo" name="tipo" class="form-select form-control-luxury">
+              <option value="frase">Texto grabado</option>
+              <option value="imagen">Logo personalizado</option>
+              <option value="ambos">Texto y logo</option>
             </select>
           </div>
 
           <div id="div-frase" class="mb-4" style="display: none;">
-            <label for="frase" class="form-label fw-bold mb-3">Tu texto personalizado</label>
-            <input type="text" id="frase" name="frase" class="form-control form-control-tech" placeholder="Ej: #TechLover">
-            <small class="text-muted">Máximo 30 caracteres</small>
+            <label for="frase" class="form-label fw-bold mb-3">Tu mensaje exclusivo</label>
+            <input type="text" id="frase" name="frase" class="form-control form-control-luxury" placeholder="Ej: Made exclusively for [Your Name]">
+            <small class="text-muted">Máximo 30 caracteres - Será grabado con acabado premium</small>
           </div>
 
           <div id="div-imagen" class="mb-4" style="display: none;">
-            <label for="imagen" class="form-label fw-bold mb-3">Sube tu imagen</label>
-            <input type="file" id="imagen" name="imagen" class="form-control form-control-tech">
-            <small class="text-muted">Formatos: JPG, PNG (max. 2MB)</small>
+            <label for="imagen" class="form-label fw-bold mb-3">Sube tu diseño</label>
+            <input type="file" id="imagen" name="imagen" class="form-control form-control-luxury">
+            <small class="text-muted">Formatos: JPG, PNG, SVG (max. 5MB) - Nuestros artesanos revisarán tu diseño</small>
           </div>
 
-          <div class="text-center mt-4">
-            <button type="submit" class="btn btn-primary-tech btn-tech px-5">
-              <i class="fas fa-magic me-2"></i> Aplicar personalización
+          <div class="text-center mt-4 pt-3">
+            <button type="submit" class="btn btn-primary-luxury btn-luxury px-5">
+              <i class="fas fa-gem me-2"></i> Crear pieza única
             </button>
           </div>
         </form>
       </div>
     </div>
 
-    <!-- Comentarios y valoraciones -->
-    <div class="tech-card p-4 mb-4">
-      <h4 class="mb-4"><i class="fas fa-comments me-2"></i> Opiniones de clientes</h4>
+    <!-- Opiniones de clientes exclusivos -->
+    <div class="luxury-card p-5 mb-5">
+      <h4 class="mb-5 text-center"><i class="fas fa-star me-2"></i> Opiniones de Nuestros Clientes</h4>
       
       {% for comentario in comentarios %}
-      <div class="comment-card p-3 mb-3 bg-light rounded">
-        <div class="d-flex justify-content-between align-items-center mb-2">
+      <div class="comment-card p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
           <div>
             <strong>{{ comentario.usuario.username }}</strong>
-            <span class="star-rating ms-2">
+            <span class="star-rating ms-3">
               {% for i in "12345"|make_list %}
                 {% if forloop.counter <= comentario.estrellas %}
                   <i class="fas fa-star"></i>
@@ -370,55 +498,40 @@
         <p class="mb-0">{{ comentario.texto }}</p>
       </div>
       {% empty %}
-      <div class="text-center py-4">
-        <i class="far fa-comment-dots fa-3x text-muted mb-3"></i>
-        <p class="text-muted">No hay comentarios aún. ¡Sé el primero en opinar!</p>
+      <div class="text-center py-5">
+        <i class="far fa-comment-alt fa-3x mb-4" style="color: var(--gold);"></i>
+        <p class="text-muted">Sé el primero en compartir tu experiencia con este producto exclusivo</p>
       </div>
       {% endfor %}
 
-      <hr class="my-4">
+      <hr class="my-5" style="border-color: rgba(212, 175, 55, 0.2);">
 
-      <h5 class="mb-3"><i class="fas fa-edit me-2"></i> Deja tu valoración</h5>
+      <h5 class="mb-4 text-center"><i class="fas fa-pen-fancy me-2"></i> Comparte Tu Experiencia</h5>
       <form method="post" class="mt-3">
         {% csrf_token %}
-        <div class="mb-3">
-          <label class="form-label fw-bold">Tu valoración</label>
-          <div class="star-rating mb-2">
+        <div class="mb-4 text-center">
+          <label class="form-label fw-bold d-block mb-3">Tu valoración</label>
+          <div class="star-rating mb-2 d-inline-block">
             {% for i in "12345"|make_list %}
-              <i class="far fa-star rating-star" data-value="{{ forloop.counter }}" style="cursor: pointer; font-size: 1.5rem;"></i>
+              <i class="far fa-star rating-star" data-value="{{ forloop.counter }}" style="cursor: pointer; font-size: 1.8rem; margin: 0 5px;"></i>
             {% endfor %}
             <input type="hidden" name="estrellas" id="rating-value" value="5">
           </div>
         </div>
-        <div class="mb-3">
-          <label for="texto" class="form-label fw-bold">Comentario</label>
-          <textarea name="texto" class="form-control form-control-tech" rows="3" required></textarea>
+        <div class="mb-4">
+          <label for="texto" class="form-label fw-bold">Tu reseña exclusiva</label>
+          <textarea name="texto" class="form-control form-control-luxury" rows="4" required placeholder="Cuéntanos qué hace especial este producto para ti..."></textarea>
         </div>
-        <button type="submit" name="comentario_submit" class="btn btn-primary-tech btn-tech">
-          <i class="fas fa-paper-plane me-2"></i> Enviar valoración
-        </button>
+        <div class="text-center">
+          <button type="submit" name="comentario_submit" class="btn btn-primary-luxury btn-luxury">
+            <i class="fas fa-paper-plane me-2"></i> Publicar Valoración
+          </button>
+        </div>
       </form>
-    </div>
-
-    <!-- Productos relacionados (opcional) -->
-    <div class="tech-card p-4">
-      <h4 class="mb-4"><i class="fas fa-random me-2"></i> Productos relacionados</h4>
-      <div class="row">
-        <!-- Aquí irían productos relacionados -->
-        <div class="col-md-3 col-6 mb-3">
-          <div class="tech-card h-100 p-3 text-center">
-            <img src="https://via.placeholder.com/150" class="img-fluid mb-3" style="height: 120px; object-fit: contain;">
-            <h6 class="fw-bold">Producto Relacionado 1</h6>
-            <p class="text-primary fw-bold">199,99 €</p>
-            <button class="btn btn-outline-tech btn-sm w-100">Ver detalles</button>
-          </div>
-        </div>
-        <!-- Repetir para otros productos -->
-      </div>
     </div>
   </div>
 
-  <!-- Scripts -->
+  <!-- Scripts premium -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -491,6 +604,36 @@
               s.classList.add('far');
             }
           });
+        });
+        
+        // Efecto hover para las estrellas
+        star.addEventListener('mouseover', function() {
+          const value = this.getAttribute('data-value');
+          stars.forEach((s, index) => {
+            if (index < value) {
+              s.classList.add('fa-star-half-alt');
+              s.classList.remove('far');
+            }
+          });
+        });
+        
+        star.addEventListener('mouseout', function() {
+          const currentValue = ratingValue.value;
+          stars.forEach((s, index) => {
+            s.classList.remove('fa-star-half-alt');
+            if (index >= currentValue) {
+              s.classList.add('far');
+              s.classList.remove('fas');
+            }
+          });
+        });
+      });
+
+      // Animación para el icono de desplegable
+      document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(button => {
+        button.addEventListener('click', function() {
+          const icon = this.querySelector('i');
+          icon.classList.toggle('rotate-180');
         });
       });
     });

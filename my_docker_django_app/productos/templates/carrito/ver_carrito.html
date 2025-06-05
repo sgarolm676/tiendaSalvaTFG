@@ -3,34 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tu Carrito de Compras</title>
+    <title>Tu Carrito de Compras | TechCore</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            padding: 20px;
-            background-color: #f8f9fa;
+        /* Paleta de colores premium */
+        :root {
+            --primary-color: #1a1a2e;
+            --secondary-color: #16213e;
+            --accent-color: #0f3460;
+            --gold-color: #e6b31e;
+            --light-color: #f9f9f9;
+            --dark-color: #121212;
+            --text-color: #333333;
+            --light-gray: #e8e8e8;
         }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--light-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        /* Estilos para la tabla */
         .table {
             background-color: white;
-            box-shadow: 0 0.15rem 1rem rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);
         }
+
+        .table thead {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .table thead th {
+            border-bottom: none;
+            font-weight: 500;
+        }
+
+        .table tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        .table tbody tr:hover {
+            background-color: rgba(22, 33, 62, 0.03);
+        }
+
         .text-muted {
-            color: #6c757d!important;
+            color: #777 !important;
         }
+
+        /* Botones */
+        .btn {
+            border-radius: 30px;
+            padding: 8px 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
         .btn-sm {
-            padding: 0.25rem 0.5rem;
+            padding: 0.35rem 0.7rem;
+            font-size: 0.85rem;
+        }
+
+        .btn-outline-primary {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-outline-secondary {
+            border-color: var(--light-gray);
+            color: var(--text-color);
+        }
+
+        .btn-outline-secondary:hover {
+            background-color: var(--light-gray);
+            color: var(--primary-color);
+        }
+
+        .btn-success {
+            background-color: var(--gold-color);
+            border-color: var(--gold-color);
+            color: var(--primary-color);
+        }
+
+        .btn-success:hover {
+            background-color: #d9a61c;
+            border-color: #d9a61c;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        /* Fila total */
+        .total-row td {
+            background-color: rgba(230, 179, 30, 0.1);
+            font-weight: 700;
+        }
+
+        /* Alert */
+        .alert-info {
+            background-color: rgba(22, 33, 62, 0.1);
+            border-color: rgba(22, 33, 62, 0.2);
+            color: var(--primary-color);
+        }
+
+        /* Títulos */
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            position: relative;
+            display: inline-block;
+        }
+
+        h2:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: var(--gold-color);
+        }
+
+        h2 i {
+            color: var(--gold-color);
+            margin-right: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .btn {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            .float-end {
+                float: none !important;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2><i class="fas fa-shopping-cart"></i> Tu carrito</h2>
+        <h2><i class="fas fa-shopping-bag"></i> Tu carrito</h2>
 
         {% if carrito.items.all %}
         <div class="table-responsive">
             <table class="table table-hover">
-                <thead class="table-light">
+                <thead>
                     <tr>
                         <th>Producto</th>
                         <th>Precio</th>
@@ -96,40 +231,40 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-<script src="https://js.stripe.com/v3/"></script>
-<script>
-    const stripe = Stripe("{{ STRIPE_PUBLISHABLE_KEY }}");
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        const stripe = Stripe("{{ STRIPE_PUBLISHABLE_KEY }}");
 
-    document.getElementById("checkout-button").addEventListener("click", function () {
-    fetch("{% url 'crear_checkout_session' %}", {
-        method: "POST",
-        headers: {
-            'X-CSRFToken': '{{ csrf_token }}',
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            return response.json().then(err => { throw new Error(err.error || 'Error al procesar el pago') });
-        }
-        return response.json();
-    })
-    .then(session => {
-        if (session.error) {
-            throw new Error(session.error);
-        }
-        return stripe.redirectToCheckout({ sessionId: session.id });
-    })
-    .then(result => {
-        if (result.error) {
-            alert(result.error.message);
-        }
-    })
-    .catch(error => {
-        console.error("Error:", error);
-        alert(error.message);
+        document.getElementById("checkout-button").addEventListener("click", function () {
+        fetch("{% url 'crear_checkout_session' %}", {
+            method: "POST",
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => { throw new Error(err.error || 'Error al procesar el pago') });
+            }
+            return response.json();
+        })
+        .then(session => {
+            if (session.error) {
+                throw new Error(session.error);
+            }
+            return stripe.redirectToCheckout({ sessionId: session.id });
+        })
+        .then(result => {
+            if (result.error) {
+                alert(result.error.message);
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert(error.message);
+        });
     });
-});
-</script>
+    </script>
+</body>
 </html>

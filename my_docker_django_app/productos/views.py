@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Producto, Compra, ItemCompra,Producto, Perfil, DireccionEnvio, TarjetaPago, Carrito, ItemCarrito, ComentarioProducto
 from .forms import RegistroUsuarioForm, PersonalizacionForm, UserUpdateForm,ComentarioProductoForm, PerfilUpdateForm, DireccionEnvioForm, TarjetaPagoForm
-
+from django.http import HttpResponse
+import json
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.shortcuts import redirect
@@ -98,7 +99,7 @@ def editar_perfil(request):
         user_form = UserUpdateForm(instance=request.user)
         perfil_form = PerfilUpdateForm(instance=request.user.perfil)
 
-    context = {
+    context = { 
         'user_form': user_form,
         'perfil_form': perfil_form
     }
@@ -294,4 +295,104 @@ def compras_anteriores(request):
 def salir(request):
     logout(request)
     return redirect('lista_productos')
+
+@login_required
+@require_POST
+def desactivar_cuenta(request):
+    user = request.user
+    user.is_active = False
+    user.save()
+    logout(request)
+    messages.info(request, "Tu cuenta ha sido desactivada temporalmente.")
+    return redirect('lista_productos')
+
+@login_required
+@require_POST
+def eliminar_cuenta(request):
+    user = request.user
+    logout(request)
+    user.delete()
+    messages.warning(request, "Tu cuenta ha sido eliminada permanentemente.")
+    return redirect('lista_productos')
+
+def perfil_to_dict(perfil):
+    return {
+        'bio': perfil.bio,
+        'imagen_url': perfil.imagen.url if perfil.imagen else None,
+    }
+
+def direccion_to_dict(direccion):
+    return {
+        'nombre_completo': direccion.nombre_completo,
+        'direccion': direccion.direccion,
+        'ciudad': direccion.ciudad,
+        'codigo_postal': direccion.codigo_postal,
+        'pais': direccion.pais,
+    }
+
+def tarjeta_to_dict(tarjeta):
+    return {
+        'titular': tarjeta.titular,
+        'numero': tarjeta.numero,
+        'expiracion': tarjeta.expiracion,
+        # No incluyo cvv por seguridad
+    }
+
+def item_compra_to_dict(item):
+    return {
+        'producto': f"{item.producto.marca} {item.producto.modelo}",
+        'cantidad': item.cantidad,
+        'personalizado': item.personalizado,
+        'precio_unitario': str(item.producto.precio),
+        'total_item': str(item.get_total()),
+    }
+
+def compras_to_dict(compras):
+    return [
+        {
+            'id': c.id,
+            'fecha': c.fecha.isoformat(),
+            'total': str(c.total),
+            'items': [item_compra_to_dict(i) for i in c.items.all()],
+        }
+        for c in compras
+    ]
+
+def item_carrito_to_dict(item):
+    return {
+        'producto': f"{item.producto.marca} {item.producto.modelo}",
+        'cantidad': item.cantidad,
+        'personalizado': item.personalizado,
+        'precio_unitario': str(item.producto.precio),
+        'total_item': str(item.get_total_item()),
+    }
+
+def carrito_to_dict(carrito):
+    if not carrito:
+        return None
+    return {
+        'items': [item_carrito_to_dict(i) for i in carrito.items.all()],
+        'total_carrito': str(carrito.get_total_carrito()),
+    }
+
+@login_required
+@require_POST
+def descargar_datos(request):
+    user = request.user
+
+    perfil = getattr(user, 'perfil', None)
+    direccion = getattr(user, 'direccionenvio', None)
+    tarjeta = getattr(user, 'tarjetapago', None)
+    carrito = getattr(user, 'carrito', None)
+    compras = user.compras.all()
+
+    data = {
+        'perfil': perfil_to_dict(perfil) if perfil else None,
+        'direccion_envio': direccion_to_dict(direccion) if direccion else None,
+        'tarjeta_pago': tarjeta_to_dict(tarjeta) if tarjeta else None,
+        'carrito': carrito_to_dict(carrito),
+        'compras': compras_to_dict(compras),
+    }
+
+    return JsonResponse(data, safe=True)
 

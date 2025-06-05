@@ -21,17 +21,33 @@
 
     body {
       font-family: 'Poppins', sans-serif;
-      background-color: var(--bg-light);
-      color: var(--primary-color);
+      background-color: #f8f9fa;
+    }
+
+    .card-title i {
+      color: #6c757d;
+    }
+
+    .navbar-brand i {
+      color: #0d6efd;
     }
 
     .navbar {
-      background-color: var(--primary-color);
+      background-color: var(--bg-light); /* fondo claro */
     }
 
     .navbar .nav-link,
     .navbar .navbar-brand {
-      color: white !important;
+      color: #000 !important; /* enlaces en negro */
+    }
+    .navbar .nav-link.text-danger {
+      color: #dc3545 !important; /* rojo Bootstrap para "Salir" */
+    }
+
+    .navbar .nav-link.active,
+    .navbar .nav-link:hover {
+      font-weight: bold;
+      color: #000 !important;
     }
 
     .card {
@@ -91,16 +107,16 @@
 <body>
 
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg shadow-sm">
+  <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
     <div class="container">
-      <a class="navbar-brand" href="{% url 'lista_productos' %}">
+      <a class="navbar-brand fw-bold" href="{% url 'lista_productos' %}">
         <i class="fas fa-store me-2"></i>TechCore
       </a>
-      <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
+        <ul class="navbar-nav ms-auto fw-semibold">
           <li class="nav-item">
             <a class="nav-link {% if request.resolver_match.url_name == 'lista_productos' %}active{% endif %}" href="{% url 'lista_productos' %}">
               <i class="fas fa-home me-1"></i> Inicio
@@ -122,10 +138,10 @@
             </a>
           </li>
           <li class="nav-item">
-            <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+            <form id="logout-form" action="{% url 'logout' %}" method="post" style="display:none;">
               {% csrf_token %}
             </form>
-            <a class="nav-link" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            <a class="nav-link text-danger" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
               <i class="fas fa-sign-out-alt me-1"></i> Salir
             </a>
           </li>

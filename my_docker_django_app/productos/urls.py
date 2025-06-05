@@ -1,6 +1,6 @@
 from django.urls import path, include
 
-from .views import compras_anteriores,salir, lista_productos, cerrar_sesion, pago_exitoso,registrar_usuario, detalle_producto,editar_perfil, configuracion_usuario, agregar_al_carrito, ver_carrito, eliminar_del_carrito, aumentar_cantidad, disminuir_cantidad, crear_checkout_session, procesar_pago
+from .views import eliminar_cuenta, desactivar_cuenta, descargar_datos,compras_anteriores,salir, lista_productos, cerrar_sesion, pago_exitoso,registrar_usuario, detalle_producto,editar_perfil, configuracion_usuario, agregar_al_carrito, ver_carrito, eliminar_del_carrito, aumentar_cantidad, disminuir_cantidad, crear_checkout_session, procesar_pago
 urlpatterns = [
     path('', lista_productos, name='lista_productos'),
     path('register/', registrar_usuario, name='register'),
@@ -19,7 +19,9 @@ urlpatterns = [
     path('pago-exitoso/', pago_exitoso, name='pago_exitoso'),
     path('salir/', salir, name='salir'),
     path('perfil/compras/', compras_anteriores, name='compras_anteriores'),
-
+     path('cuenta/eliminar/', eliminar_cuenta, name='eliminar_cuenta'),
+    path('cuenta/desactivar/', desactivar_cuenta, name='desactivar_cuenta'),
+    path('cuenta/descargar-datos/', descargar_datos, name='descargar_datos'),
 
 
 

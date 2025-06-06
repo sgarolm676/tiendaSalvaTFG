@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Colección Exclusiva | TechCore</title>
+  <title>Colección de TechCore</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -196,7 +196,7 @@
     object-fit: cover;
     border-radius: 4px;
     border: 1px solid #f0f0f0;
-}
+  }
 
     .product-actions {
       margin-top: auto;
@@ -324,11 +324,11 @@
 </head>
 <body>
   <div class="container py-4">
-    <!-- Header Premium -->
+    <!-- Header-->
     <header class="d-flex flex-wrap justify-content-between align-items-center mb-5">
       <h1 class="navbar-brand mb-0">Tech<span>Core</span></h1>
 
-      <!-- Barra de búsqueda elegante -->
+      <!-- Barra de búsqueda -->
       <form action="{% url 'lista_productos' %}" method="GET" class="d-flex search-bar">
         <input type="text" name="q" class="form-control" placeholder="Buscar productos exclusivos..." value="{{ request.GET.q }}">
         <button type="submit" class="btn"><i class="fas fa-search"></i></button>
@@ -378,7 +378,7 @@
       </div>
     </div>
 
-    <!-- Productos Destacados -->
+    <!-- Productos en Stock -->
     <h2 class="section-title">Nuestras Productos</h2>
     <div class="row">
       {% for producto in productos %}
@@ -419,8 +419,8 @@
       {% endfor %}
     </div>
 
-    <!-- Llamada a la acción -->
-    <!-- Llamada a la acción -->
+    <!--Top Productos Vendidos-->
+    
   <div class="container py-5">
     <div class="card border-0 shadow-sm">
         <div class="card-header bg-white border-0 py-3">
@@ -476,7 +476,7 @@
 
 
 
-  <!-- Footer Premium -->
+  <!--Footer-->
 <footer class="premium-footer">
     <div class="container">
       <div class="row">
@@ -504,21 +504,21 @@
           <div class="footer-links">
             <a href="#">Asesoramiento</a>
             <a href="#">Configuración personalizada</a>
-            <a href="#">Entrega premium</a>
+            <a href="#">Entrega inmediata</a>
             <a href="#">Soporte exclusivo</a>
           </div>
         </div>
         <div class="col-md-4">
           <h4 class="footer-title">Contacto</h4>
-          <p><i class="fas fa-map-marker-alt me-2"></i> Av. de la Tecnología 123, Madrid</p>
-          <p><i class="fas fa-phone me-2"></i> +34 910 123 456</p>
-          <p><i class="fas fa-envelope me-2"></i> exclusivo@techcore.com</p>
+          <p><i class="fas fa-map-marker-alt me-2"></i>  Calle Fernández de Ribera, 18, Sevilla</p>
+          <p><i class="fas fa-phone me-2"></i> +34 671 92 36 42 </p>
+          <p><i class="fas fa-envelope me-2"></i> administracion@techcore.com</p>
         </div>
       </div>
       <hr class="mt-5 mb-4" style="border-color: rgba(255,255,255,0.1);">
       <div class="row">
         <div class="col-md-6 text-center text-md-start">
-          <p class="small mb-0">© 2023 TechCore. Todos los derechos reservados.</p>
+          <p class="small mb-0">© 2025 TechCore. Todos los derechos reservados.</p>
         </div>
         <div class="col-md-6 text-center text-md-end">
           <a href="#" class="small text-white-50 me-3">Términos y condiciones</a>
@@ -531,7 +531,11 @@
 
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
+  
+</body>
+</html>
+
+<script>
     // Efectos interactivos
     document.querySelectorAll('.btn-wishlist').forEach(button => {
       button.addEventListener('click', function() {
@@ -550,5 +554,3 @@
       });
     });
   </script>
-</body>
-</html>

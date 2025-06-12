@@ -171,6 +171,15 @@ def aumentar_cantidad(request, item_id):
     item = get_object_or_404(ItemCarrito, id=item_id, carrito__usuario=request.user)
     item.cantidad += 1
     item.save()
+    total_producto = item.cantidad * item.producto.precio
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({
+            'cantidad': item.cantidad,
+            'total_producto': total_producto,
+            'total_carrito': item.carrito.get_total_carrito(),
+        })
+
     return redirect('ver_carrito')
 
 @login_required
@@ -180,6 +189,15 @@ def disminuir_cantidad(request, item_id):
     if item.cantidad > 1:
         item.cantidad -= 1
         item.save()
+    total_producto = item.cantidad * item.producto.precio
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({
+            'cantidad': item.cantidad,
+            'total_producto': total_producto,
+            'total_carrito': item.carrito.get_total_carrito(),
+        })
+
     return redirect('ver_carrito')
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
